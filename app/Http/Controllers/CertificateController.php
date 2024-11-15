@@ -10,9 +10,16 @@ use Illuminate\Support\Facades\Storage;
 
 class CertificateController extends Controller
 {
+    // public function showPastOpportunities()
+    // {
+    //     $opportunities = auth()->user()->pastOpportunities()->with('registrations')->get();
+
+    //     return view('certificates.past_opportunities', compact('opportunities'));
+    // }
+
     public function showPastOpportunities()
     {
-        $opportunities = auth()->user()->pastOpportunities()->with('registrations')->get();
+        $opportunities = Opportunity::with('registrations')->get();
 
         return view('certificates.past_opportunities', compact('opportunities'));
     }

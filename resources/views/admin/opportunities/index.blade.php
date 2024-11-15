@@ -10,7 +10,6 @@
                     <th class="py-2 px-4 border-b">Title</th>
                     <th class="py-2 px-4 border-b">Description</th>
                     <th class="py-2 px-4 border-b">Organization</th>
-                    <th class="py-2 px-4 border-b">Created At</th>
                     <th class="py-2 px-4 border-b">Actions</th>
                 </tr>
             </thead>
@@ -20,7 +19,6 @@
                     <td class="py-2 px-4 border-b">{{ $opportunity->oppTitle }}</td>
                     <td class="py-2 px-4 border-b">{{ $opportunity->oppDesc }}</td>
                     <td class="py-2 px-4 border-b">{{ $opportunity->organization->organizationName }}</td>
-                    <td class="py-2 px-4 border-b">{{ $opportunity->created_at->format('Y-m-d') }}</td>
                     <td class="py-2 px-4 border-b">
                         <a href="{{ route('admin.opportunities.edit', $opportunity->oppId) }}" class="text-blue-500 hover:text-blue-700">Edit</a>
                         <form action="{{ route('admin.opportunities.delete', $opportunity->oppId) }}" method="POST" class="inline-block">

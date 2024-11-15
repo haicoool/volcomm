@@ -93,30 +93,42 @@ class OpportunityController extends Controller
         $validated = $request->validate([
             'oppTitle' => 'required|string|max:255',
             'oppDesc' => 'required|string',
-            'oppLocation' => 'required|string',
+            'oppLocation' => 'required|string|max:255',
             'oppDate' => 'required|date',
-            'oppTime' => 'required|date_format:H:i',
-            'reqSkill' => 'nullable|string',
-            'maxCapacity' => 'required|integer',
-            'reqQualification' => 'boolean',
-            'category' => 'nullable|string',
-            'oppImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'oppTime' => 'required',
+            'reqSkill' => 'required|string|max:255',
+            'oppImage' => 'nullable|image|max:2048', // Ensure it is an image and max size of 2MB
+            'maxCapacity' => 'required|integer|min:1', // Validate maxCapacity as an integer greater than or equal to 1
+            'reqQualification' => 'required|boolean', // Validate reqQualification as a boolean (1 for Yes, 0 for No)
+            'category' => 'required|string|max:255', // Validate category as a required string
         ]);
+
+        // Handle the file upload if provided
+        if ($request->hasFile('oppImage')) {
+            $imagePath = $request->file('oppImage')->store('opportunities', 'public');
+        } else {
+            $imagePath = null;
+        }
 
         // Find the opportunity by its id
         $opportunity = Opportunity::findOrFail($id);
 
-        // Handle image upload
-        if ($request->hasFile('oppImage')) {
-            $imagePath = $request->file('oppImage')->store('opportunity_images', 'public');
-            $validated['oppImage'] = $imagePath;
-        }
+        // Update the opportunity in the database
+        $opportunity->update([
+            'oppTitle' => $validated['oppTitle'],
+            'oppDesc' => $validated['oppDesc'],
+            'oppLocation' => $validated['oppLocation'],
+            'oppDate' => $validated['oppDate'],
+            'oppTime' => $validated['oppTime'],
+            'reqSkill' => $validated['reqSkill'],
+            'oppImage' => $imagePath,
+            'maxCapacity' => $validated['maxCapacity'], // Store maxCapacity
+            'reqQualification' => $validated['reqQualification'], // Store reqQualification
+            'category' => $validated['category'], // Store category
+        ]);
 
-        // Update the opportunity with the validated data
-        $opportunity->update($validated);
-
-        // Redirect back with a success message
-        return redirect()->route('opportunities.manage', $id)->with('success', 'Opportunity updated successfully!');
+        // Redirect back to opportunities page with success message
+        return redirect()->route('opportunities.manage', ['id' => $opportunity->oppId])->with('success', 'Opportunity updated successfully!');
     }
 
 
