@@ -208,8 +208,8 @@ class AdminController extends Controller
     public function updateOpportunity(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'oppTitle' => 'required|string|max:255',
+            'oppDesc' => 'required|string',
             // Add other fields as necessary
         ]);
 
