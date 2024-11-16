@@ -28,7 +28,7 @@
 <div class="flex flex-1">
 
     <!-- Sidebar Navigation (full height) -->
-    <div class="w-64 bg-gradient-to-b from-gray-50 to-gray-100 shadow-md min-h-screen pt-8 border-r border-gray-200">
+    <div class="w-64 bg-[#F3EAFB] shadow-md min-h-screen pt-8 border-r border-gray-200">
         <!-- User Profile Section -->
         @if(Auth::check())
             <div class="flex items-center space-x-4 px-6 mb-6">
@@ -97,20 +97,7 @@
 <!-- Flowbite and Tailwind scripts -->
 <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.js"></script>
 
-<!-- SweetAlert2 script -->
-<script>
-    window.onload = function() {
-        @if (session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: '{{ session('success') }}',
-                confirmButtonText: 'Okay'
-            });
-        @endif
-    };
-</script>
-@stack('scripts')
+
 
 </body>
 </html>

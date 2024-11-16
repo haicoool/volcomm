@@ -13,7 +13,7 @@ class CreateVolunteersTable extends Migration
             $table->string('vName');
             $table->string('vEmail')->unique();
             $table->string('vPass'); // Password will be stored as a hash
-            $table->string('vSkill');
+            $table->string('vSkill')->nullable();
             $table->string('vProfilepic')->nullable(); // Path to profile picture
             $table->json('vQualification')->nullable(); // JSON-encoded array of file paths for qualifications
             $table->json('interest')->nullable(); // JSON-encoded array of interests

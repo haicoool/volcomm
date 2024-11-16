@@ -161,6 +161,11 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
     // Route to delete an admin
     Route::delete('/admin/delete/{id}', [AdminController::class, 'destroy'])->name('admin.delete');
+
+    Route::get('/admin/opportunities', [AdminController::class, 'indexOpportunities'])->name('admin.opportunities.index');
+    Route::get('/admin/opportunities/{id}/edit', [AdminController::class, 'editOpportunity'])->name('admin.opportunities.edit');
+    Route::put('/admin/opportunities/{id}', [AdminController::class, 'updateOpportunity'])->name('admin.opportunities.update');
+    Route::delete('/admin/opportunities/{id}', [AdminController::class, 'deleteOpportunity'])->name('admin.opportunities.delete');
 });
 
 

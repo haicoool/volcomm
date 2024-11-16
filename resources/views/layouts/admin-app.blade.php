@@ -42,6 +42,10 @@
                     <i class="fas fa-user-cog mr-3"></i>
                     <span>Manage Admin</span>
                 </a>
+                <a href="{{ route('admin.opportunities.index') }}" class="flex items-center py-2 px-3 rounded-lg text-gray-300 transition duration-200 hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin.opportunities.index') ? 'bg-gray-700 text-white' : '' }}">
+                    <i class="fas fa-briefcase mr-3"></i>
+                    <span>Manage Opportunities</span>
+                </a>
                 
                 <form method="POST" action="{{ route('admin.logout') }}" class="mt-6">
                     @csrf

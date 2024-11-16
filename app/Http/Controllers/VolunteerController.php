@@ -31,7 +31,7 @@ class VolunteerController extends Controller
             'vName' => 'required|string|max:255',
             'vEmail' => 'required|email|unique:volunteers',
             'vPass' => 'required|min:6|confirmed',
-            'vSkill' => 'required|string',
+            'vSkill' => 'nullable|string',
             'vProfilepic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'vQualification.*' => 'nullable|file|mimes:pdf,doc,docx,zip,jpeg,png,jpg,gif|max:5000',
         ]);
@@ -124,7 +124,7 @@ class VolunteerController extends Controller
         return redirect()->route('volunteer.login');
     }
 
-    
+
 
     public function registerForOpportunity(Request $request, $opportunityId)
     {

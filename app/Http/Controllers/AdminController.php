@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Volunteer;
 use App\Models\Organization;
+use App\Models\Opportunity;
 
 class AdminController extends Controller
 {
@@ -190,5 +191,39 @@ class AdminController extends Controller
         $admin = Admin::findOrFail($id); // Fetch the admin by ID
         $admin->delete(); // Delete the admin
         return redirect()->route('admin.manage')->with('success', 'Admin deleted successfully!'); // Redirect back with success message
+    }
+
+    public function indexOpportunities()
+    {
+        $opportunities = Opportunity::with('organization')->orderBy('created_at', 'desc')->get(); // Eager load organization
+        return view('admin.opportunities.index', compact('opportunities'));
+    }
+
+    public function editOpportunity($id)
+    {
+        $opportunity = Opportunity::findOrFail($id);
+        return view('admin.opportunities.edit', compact('opportunity'));
+    }
+
+    public function updateOpportunity(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            // Add other fields as necessary
+        ]);
+
+        $opportunity = Opportunity::findOrFail($id);
+        $opportunity->update($request->all());
+
+        return redirect()->route('admin.opportunities.index')->with('success', 'Opportunity updated successfully!');
+    }
+
+    public function deleteOpportunity($id)
+    {
+        $opportunity = Opportunity::findOrFail($id);
+        $opportunity->delete();
+
+        return redirect()->route('admin.opportunities.index')->with('success', 'Opportunity deleted successfully!');
     }
 }

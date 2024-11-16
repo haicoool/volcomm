@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('certificates', function (Blueprint $table) {
             $table->id('certificateId');
-            $table->string('registrationId');
+            $table->unsignedBigInteger('registrationId'); // Assuming regId is unsigned big integer
             $table->string('oppTitle');
             $table->string('vName');
             $table->string('oppLocation');
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('signerName');
             $table->string('signerPosition');
             $table->timestamps();
-    
+
             $table->foreign('registrationId')->references('regId')->on('registrations')->onDelete('cascade');
         });
     }
