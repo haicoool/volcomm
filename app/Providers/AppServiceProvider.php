@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,10 +20,10 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot()
     {
-        DB::listen(function ($query) {
-            Log::info("Query executed: {$query->sql} with bindings: " . json_encode($query->bindings));
-        });
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }
