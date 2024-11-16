@@ -194,23 +194,42 @@ class VolunteerController extends Controller
     {
         $volunteer = Auth::user(); // Get the authenticated volunteer
 
+        // Validate the input fields
         $request->validate([
             'vName' => 'sometimes|required|string|max:255',
             'vEmail' => 'sometimes|required|email|unique:volunteers,vEmail,' . $volunteer->vId,
-            'vSkill' => 'sometimes|required|string',
+            'vSkill' => 'sometimes|required|string|max:255',
             'vProfilepic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'currentPassword' => 'required_with:newPassword|current_password', // Validate current password
             'newPassword' => 'nullable|min:6|confirmed', // Validate new password with confirmation
         ]);
 
-        // Update fields if changed
-        if ($request->filled('vName')) $volunteer->vName = $request->vName;
-        if ($request->filled('vEmail')) $volunteer->vEmail = $request->vEmail;
-        if ($request->filled('vSkill')) $volunteer->vSkill = $request->vSkill;
+        // Update fields only if provided
+        if ($request->filled('vName')) {
+            $volunteer->vName = $request->vName;
+        }
+        if ($request->filled('vEmail')) {
+            $volunteer->vEmail = $request->vEmail;
+        }
+        if ($request->filled('vSkill')) {
+            $volunteer->vSkill = $request->vSkill;
+        }
 
         // Handle profile picture upload
         if ($request->hasFile('vProfilepic')) {
-            $volunteer->vProfilepic = Storage::disk('s3')->put('volunteer/profilepics', $request->file('vProfilepic'), 'public');
+            // Delete the old profile picture if it exists
+            if ($volunteer->vProfilepic) {
+                Storage::disk('s3')->delete($volunteer->vProfilepic);
+            }
+
+            // Upload the new profile picture to S3
+            $path = $request->file('vProfilepic')->store(
+                'volunteer/profilepics', // Folder in the bucket
+                ['disk' => 's3', 'visibility' => 'public'] // Disk and visibility
+            );
+
+            // Save the file path in the database
+            $volunteer->vProfilepic = $path;
         }
 
         // Update password if new password is provided
@@ -218,15 +237,16 @@ class VolunteerController extends Controller
             $volunteer->vPass = Hash::make($request->newPassword);
         }
 
-        $volunteer->save(); // Save the updated volunteer information
+        // Save the updated volunteer information
+        $volunteer->save();
 
-        // Stay on the same page, highlight the profile section
-        return view('volunteer.editProfile', [
-            'volunteer' => $volunteer,
-            'activeSection' => 'profile', // Indicate that the profile section was updated
+        // Redirect back with success message
+        return redirect()->route('volunteer.editProfile')->with([
             'success' => 'Profile updated successfully!',
+            'activeSection' => 'profile', // Indicate the updated section
         ]);
     }
+
 
     // Add Qualification
     public function addQualification(Request $request)
