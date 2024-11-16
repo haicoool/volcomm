@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\OrganizationController;
@@ -191,3 +192,7 @@ Route::post('/admin/organizations/accept/{id}', [AdminController::class, 'accept
 Route::post('/admin/organizations/reject/{id}', [AdminController::class, 'rejectOrganization'])->name('admin.organizations.reject');
 
 Route::get('/admin/manage', [AdminController::class, 'manageAdmins'])->name('admin.manage');
+
+Route::get('/linkstorage', function () {
+    Artisan::call('storage:link');
+});
