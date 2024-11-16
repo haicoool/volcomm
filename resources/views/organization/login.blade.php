@@ -14,7 +14,9 @@
 <body class="h-screen flex items-center justify-center relative">
 
 <!-- Background Image with Opacity -->
-<div class="absolute inset-0 bg-cover bg-center opacity-80" style="background-image: url('{{ asset('storage/bg-organization.jpg') }}');"></div>
+<div class="absolute inset-0 bg-cover bg-center opacity-80"
+     style="background-image: url('{{ Storage::disk('s3')->url('bg-organization.jpg') }}');">
+</div>
 
 <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative transition-transform transform hover:scale-105 hover:transition hover:duration-500 hover:ease-in-out">
 
