@@ -208,4 +208,19 @@ Route::get('/list-files', function () {
     return $files;
 });
 
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/clear-cache', function () {
+    try {
+        // Clear configuration cache
+        Artisan::call('config:clear');
+        Artisan::call('cache:clear');
+        Artisan::call('config:cache');
+
+        return response()->json(['status' => 'success', 'message' => 'Configuration and cache cleared!']);
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+    }
+});
+
 
