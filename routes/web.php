@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OpportunityController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CertificateController;
+use Illuminate\Support\Facades\Storage;
 
 // Home Route
 Route::get('/', function () {
@@ -191,4 +192,20 @@ Route::post('/admin/organizations/accept/{id}', [AdminController::class, 'accept
 Route::post('/admin/organizations/reject/{id}', [AdminController::class, 'rejectOrganization'])->name('admin.organizations.reject');
 
 Route::get('/admin/manage', [AdminController::class, 'manageAdmins'])->name('admin.manage');
+
+Route::get('/test-s3', function () {
+    $result = Storage::disk('s3')->put('example.txt', 'This is the content of the file.');
+    return $result ? 'File uploaded successfully!' : 'File upload failed!';
+});
+
+Route::get('/get-file-url', function () {
+    $url = Storage::disk('s3')->url('example.txt');
+    return $url;
+});
+
+Route::get('/list-files', function () {
+    $files = Storage::disk('s3')->allFiles();
+    return $files;
+});
+
 
