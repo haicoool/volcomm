@@ -39,14 +39,14 @@ class VolunteerController extends Controller
         // Handle profile picture upload
         $profilePicPath = null;
         if ($request->hasFile('vProfilepic')) {
-            $profilePicPath = $request->file('vProfilepic')->store('volunteer/profilepics', 'public');
+            $profilePicPath = Storage::disk('s3')->put('volunteer/profilepics', $request->file('vProfilepic'), 'public');
         }
 
         // Handle qualifications upload
         $qualificationPaths = [];
         if ($request->hasFile('vQualification')) {
             foreach ($request->file('vQualification') as $file) {
-                $qualificationPaths[] = $file->store('volunteer/qualifications', 'public');
+                $qualificationPaths[] = Storage::disk('s3')->put('volunteer/qualifications', $file, 'public');
             }
         }
 
@@ -210,7 +210,7 @@ class VolunteerController extends Controller
 
         // Handle profile picture upload
         if ($request->hasFile('vProfilepic')) {
-            $volunteer->vProfilepic = $request->file('vProfilepic')->store('volunteer/profilepics', 'public');
+            $volunteer->vProfilepic = Storage::disk('s3')->put('volunteer/profilepics', $request->file('vProfilepic'), 'public');
         }
 
         // Update password if new password is provided
@@ -240,7 +240,7 @@ class VolunteerController extends Controller
 
         if ($request->hasFile('vQualification')) {
             foreach ($request->file('vQualification') as $file) {
-                $qualificationPaths[] = $file->store('volunteer/qualifications', 'public');
+                $qualificationPaths[] = Storage::disk('s3')->put('volunteer/qualifications', $file, 'public');
             }
 
             // Merge old qualifications with new ones
@@ -270,7 +270,7 @@ class VolunteerController extends Controller
             unset($qualifications[$key]);
 
             $filePath = 'volunteer/qualifications/' . $qualification;
-            $fullPath = storage_path('app/' . $filePath);
+            $fullPath = Storage::disk('s3')->path($filePath);
 
             if (file_exists($fullPath)) {
                 if (unlink($fullPath)) {

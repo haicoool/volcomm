@@ -176,7 +176,7 @@
             <!-- Profile Picture -->
             <div class="mb-4">
                 <label for="vProfilepic" class="block text-sm font-medium text-gray-700">Profile Picture</label>
-                <input type="file" name="vProfilepic" id="vProfilepic" class="mt-1 block w-full">
+                <input type="file" name="vProfilepic" id="vProfilepic" class="mt-1 block w-full" onchange="toggleAddButton()">
             </div>
 
             <!-- Current Password -->
@@ -219,7 +219,7 @@
                 @endphp
                 @foreach($qualifications as $qualification)
                     <div class="flex items-center justify-between mb-2">
-                        <a href="{{ asset('storage/' . $qualification) }}" target="_blank" class="text-blue-500 hover:underline">{{ basename($qualification) }}</a>
+                        <a href="{{ Storage::disk('s3')->url($qualification) }}" target="_blank" class="text-blue-500 hover:underline">{{ basename($qualification) }}</a>
                         <form action="{{ route('volunteer.remove-qualification') }}" method="POST" class="inline" onsubmit="handleDelete(event)">
                             @csrf
                             @method('DELETE')
