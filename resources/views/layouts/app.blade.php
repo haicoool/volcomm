@@ -18,7 +18,7 @@
         <div>
             <div class="p-6">
                 <div class="flex items-center space-x-4">
-                    <img src="{{ asset('storage/' . Auth::guard('organization')->user()->logo) }}" alt="Profile Picture" class="w-12 h-12 rounded-full shadow">
+                    <img src="{{ Auth::guard('organization')->user()->logo }}" alt="Profile Picture" class="w-12 h-12 rounded-full shadow">
                     <div>
                         <h2 class="text-lg font-semibold">Hi, {{ Auth::guard('organization')->user()->organizationName }}</h2>
                         <!-- Debugging output for organizationId -->

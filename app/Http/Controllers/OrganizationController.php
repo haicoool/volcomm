@@ -137,7 +137,7 @@ class OrganizationController extends Controller
 
         // Handle the file upload if provided
         if ($request->hasFile('oppImage')) {
-            $imagePath = $request->file('oppImage')->store('opportunities', 'public');
+            $imagePath = $request->file('oppImage')->store('opportunities', 's3');
         } else {
             $imagePath = null;
         }
@@ -169,7 +169,7 @@ class OrganizationController extends Controller
         $pendingRegistrations = Registration::where('status', 'pending')
             ->get()
             ->map(function ($registration) {
-                $registration->qualifications = json_decode($registration->vQualification, true) ?: []; // Ensure qualifications are an array
+                $registration->qualifications = Storage::disk('s3')->get($registration->vQualification) ?: []; // Ensure qualifications are an array
                 return $registration;
             });
 
@@ -244,8 +244,9 @@ class OrganizationController extends Controller
 
         // Handle logo upload if present
         if ($request->hasFile('logo')) {
-            // Store the logo in the 'public/logos' folder
-            $organization->logo = $request->file('logo')->store('logos', 'public'); // Save path relative to 'storage/app/public'
+            // Store the logo in the 'logos' folder on S3
+            $path = $request->file('logo')->store('logos', 's3'); // Save path relative to 'storage/app/public'
+            $organization->logo = Storage::disk('s3')->url($path);
         }
 
         // Save changes to organization
