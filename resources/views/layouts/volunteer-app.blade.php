@@ -24,18 +24,15 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-<!-- Main Wrapper -->
+<!-- Main Wrapper (use flex to stretch full height) -->
 <div class="flex flex-1">
 
-    <!-- Sidebar Navigation -->
+    <!-- Sidebar Navigation (full height) -->
     <div class="w-64 bg-[#F3EAFB] shadow-md min-h-screen pt-8 border-r border-gray-200">
         <!-- User Profile Section -->
         @if(Auth::check())
             <div class="flex items-center space-x-4 px-6 mb-6">
-                <!-- Display profile picture from S3 -->
-                <img src="{{ Auth::user()->vProfilepic ? Storage::disk('s3')->url(Auth::user()->vProfilepic) : asset('images/default-profile.png') }}" 
-                     alt="Profile Picture" 
-                     class="w-12 h-12 rounded-full shadow">
+                <img src="{{ asset('s3/volunteer/profilepics/' . Auth::user()->vProfilepic) }}" alt="Profile Picture" class="w-12 h-12 rounded-full shadow">
                 <div>
                     <h2 class="text-lg font-semibold text-gray-900">Hi, {{ Auth::user()->vName }}</h2>
                 </div>
@@ -45,51 +42,37 @@
         <!-- Divider -->
         <div class="border-t border-gray-200 mb-4 mx-6"></div>
 
-        <!-- Navigation Links -->
+        <!-- Navigation Links with Icons -->
         <nav class="mt-4">
             <ul class="space-y-2">
-                <!-- Dashboard -->
                 <li>
-                    <a href="{{ route('volunteer.dashboard') }}" 
-                       class="flex items-center space-x-3 py-2 px-6 text-gray-600 hover:bg-blue-100 hover:text-blue-700 transition duration-300 ease-in-out rounded-md {{ request()->routeIs('volunteer.dashboard') ? 'bg-blue-100 text-blue-700 font-semibold' : '' }}">
+                    <a href="{{ route('volunteer.dashboard') }}" class="flex items-center space-x-3 py-2 px-6 text-gray-600 hover:bg-blue-100 hover:text-blue-700 transition duration-300 ease-in-out rounded-md {{ request()->routeIs('volunteer.dashboard') ? 'bg-blue-100 text-blue-700 font-semibold' : '' }}">
                         <i class="fas fa-search text-gray-500 {{ request()->routeIs('volunteer.dashboard') ? 'text-blue-700' : '' }}"></i>
                         <span>Explore Opportunities</span>
                     </a>
                 </li>
-
-                <!-- Edit Profile -->
                 <li>
-                    <a href="{{ route('volunteer.edit-profile') }}" 
-                       class="flex items-center space-x-3 py-2 px-6 text-gray-600 hover:bg-blue-100 hover:text-blue-700 transition duration-300 ease-in-out rounded-md {{ request()->routeIs('volunteer.edit-profile') ? 'bg-blue-100 text-blue-700 font-semibold' : '' }}">
+                    <a href="{{ route('volunteer.edit-profile') }}" class="flex items-center space-x-3 py-2 px-6 text-gray-600 hover:bg-blue-100 hover:text-blue-700 transition duration-300 ease-in-out rounded-md {{ request()->routeIs('volunteer.edit-profile') ? 'bg-blue-100 text-blue-700 font-semibold' : '' }}">
                         <i class="fas fa-user-edit text-gray-500 {{ request()->routeIs('volunteer.edit-profile') ? 'text-blue-700' : '' }}"></i>
                         <span>Edit Profile</span>
                     </a>
                 </li>
-
-                <!-- View History -->
                 <li>
-                    <a href="{{ route('volunteer.view-history') }}" 
-                       class="flex items-center space-x-3 py-2 px-6 text-gray-600 hover:bg-blue-100 hover:text-blue-700 transition duration-300 ease-in-out rounded-md {{ request()->routeIs('volunteer.view-history') ? 'bg-blue-100 text-blue-700 font-semibold' : '' }}">
+                    <a href="{{ route('volunteer.view-history') }}" class="flex items-center space-x-3 py-2 px-6 text-gray-600 hover:bg-blue-100 hover:text-blue-700 transition duration-300 ease-in-out rounded-md {{ request()->routeIs('volunteer.view-history') ? 'bg-blue-100 text-blue-700 font-semibold' : '' }}">
                         <i class="fas fa-history text-gray-500 {{ request()->routeIs('volunteer.view-history') ? 'text-blue-700' : '' }}"></i>
                         <span>View History</span>
                     </a>
                 </li>
-
-                <!-- View Certificates -->
                 <li>
-                    <a href="{{ route('volunteer.certificates') }}" 
-                       class="flex items-center space-x-3 py-2 px-6 text-gray-600 hover:bg-blue-100 hover:text-blue-700 transition duration-300 ease-in-out rounded-md {{ request()->routeIs('volunteer.certificates') ? 'bg-blue-100 text-blue-700 font-semibold' : '' }}">
+                    <a href="{{ route('volunteer.certificates') }}" class="flex items-center space-x-3 py-2 px-6 text-gray-600 hover:bg-blue-100 hover:text-blue-700 transition duration-300 ease-in-out rounded-md {{ request()->routeIs('volunteer.certificates') ? 'bg-blue-100 text-blue-700 font-semibold' : '' }}">
                         <i class="fas fa-certificate text-gray-500 {{ request()->routeIs('volunteer.certificates') ? 'text-blue-700' : '' }}"></i>
                         <span>View Certificates</span>
                     </a>
                 </li>
-
-                <!-- Logout -->
                 <li>
                     <form method="POST" action="{{ route('volunteer.logout') }}">
                         @csrf
-                        <button type="submit" 
-                                class="flex items-center space-x-3 w-full text-left py-2 px-6 text-gray-600 hover:bg-red-100 hover:text-red-700 transition duration-300 ease-in-out rounded-md">
+                        <button type="submit" class="flex items-center space-x-3 w-full text-left py-2 px-6 text-gray-600 hover:bg-red-100 hover:text-red-700 transition duration-300 ease-in-out rounded-md">
                             <i class="fas fa-sign-out-alt text-gray-500 hover:text-red-700"></i>
                             <span>Logout</span>
                         </button>
@@ -98,13 +81,13 @@
             </ul>
         </nav>
 
-        <!-- Footer -->
+        <!-- Additional padding for end spacing -->
         <div class="mt-10 px-6">
             <p class="text-sm text-gray-400">Volcomm 2024</p>
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main Content Area -->
     <div class="flex-1 p-6">
         @yield('content')
     </div>
@@ -113,6 +96,8 @@
 
 <!-- Flowbite and Tailwind scripts -->
 <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.js"></script>
+
+
 
 </body>
 </html>
