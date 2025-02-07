@@ -1,0 +1,17 @@
+@import '@fontsource/inter/500.css';  /* Regular weight */
+@import '@fontsource/inter/700.css';  /* Semi-bold weight */
+
+
+/* Ensure the body or global elements use Inter */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
