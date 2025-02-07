@@ -11,7 +11,7 @@
     <style>
         /* Background styling */
         .register-bg {
-            background: url('{{ Storage::disk('s3')->url('volcomm/bg-org.png') }}') no-repeat center center;
+            background: url('{{ Storage::disk('s3')->url('volcomm/public/bg-org.png') }}') no-repeat center center;
             background-size: cover;
         }
 
