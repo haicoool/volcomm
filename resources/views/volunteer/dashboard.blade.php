@@ -52,9 +52,8 @@
                         <div class="p-6 flex space-x-6">
                             <!-- Image -->
                             <div class="relative flex-shrink-0">
-                                <img src="{{ asset('storage/' . $opportunity->oppImage) }}" alt="{{ $opportunity->oppTitle }}" class="w-40 h-40 object-cover rounded-md">
+                                <img src="{{ Storage::url($opportunity->oppImage) }}" alt="{{ $opportunity->oppTitle }}" class="w-40 h-40 object-cover rounded-md">
                             </div>
-
                             <!-- Content -->
                             <div class="flex-1">
                                 <h2 class="text-xl font-semibold text-indigo-700 mb-2">{{ $opportunity->oppTitle }}</h2>

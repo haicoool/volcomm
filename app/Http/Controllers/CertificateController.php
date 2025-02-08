@@ -37,9 +37,10 @@ class CertificateController extends Controller
             'signerPosition' => 'required|string|max:255',
         ]);
 
-        // Store logo and signature files
-        $logoPath = $request->file('logo')->store('certificates/logos', 'public');
-        $signaturePath = $request->file('signature')->store('certificates/signatures', 'public');
+        // Store logo and signature files in S3
+        $logoPath = $request->file('logo')->store('certificates/logos', 's3');
+        $signaturePath = $request->file('signature')->store('certificates/signatures', 's3');
+
 
         foreach ($request->input('registrations', []) as $regId) {
             $registration = Registration::find($regId);

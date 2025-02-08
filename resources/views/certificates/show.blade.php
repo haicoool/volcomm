@@ -79,7 +79,7 @@
 <body onload="window.print()">
     <div class="certificate">
         <div class="logo">
-            <img src="{{ asset('storage/' . $certificate->logo) }}" alt="Logo" height="100">
+            <img src="{{ Storage::disk('s3')->url($certificate->logo) }}" alt="Logo" height="100">
         </div>
         <h1>Certificate of Participation</h1>
         <p>This is to certify that</p>
@@ -88,7 +88,7 @@
         <h3>{{ $certificate->oppTitle }}</h3>
         <p>held on {{ \Carbon\Carbon::parse($certificate->oppDate)->format('F j, Y') }}</p>
         <div class="signature">
-            <img src="{{ asset('storage/' . $certificate->signature) }}" alt="Signature">
+            <img src="{{ Storage::disk('s3')->url($certificate->signature) }}" alt="Signature">
             <p>{{ $certificate->signerName }}</p>
             <p>{{ $certificate->signerPosition }}</p>
         </div>
@@ -103,4 +103,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
