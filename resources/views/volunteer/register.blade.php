@@ -11,7 +11,7 @@
     <style>
         /* Background styling */
         .register-bg {
-            background: url('{{ asset("storage/bg-vol.png") }}') no-repeat center center;
+            background: url('{{ Storage::disk('s3')->url('public/bg-vol.png') }}') no-repeat center center;
             background-size: cover;
         }
 
@@ -43,7 +43,7 @@
 <!-- Registration Form Container -->
 <div class="z-10 w-full max-w-lg bg-white rounded-lg shadow-lg p-8">
     <!-- Logo inside the form -->
-    <img src="{{ asset('storage/volcomm-logo.png') }}" alt="Logo" class="logo">
+    <img src="{{ Storage::disk('s3')->url('public/volcomm-logo.png') }}" alt="Logo" class="logo">
 
     <h2 class="text-3xl font-bold text-center mb-8">Volunteer Registration</h2>
 

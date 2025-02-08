@@ -10,10 +10,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet">
     <style>
         /* Background styling */
-        {{--.register-bg {--}}
-        {{--    background: url('{{ Storage::disk('s3')->url('volcomm/public/bg-org.png') }}') no-repeat center center;--}}
-        {{--    background-size: cover;--}}
-        {{--}--}}
+        .register-bg {
+            background: url('{{ Storage::disk('s3')->url('public/bg-org.png') }}') no-repeat center center;
+            background-size: cover;
+        }
 
         .overlay {
             background: rgba(0, 0, 0, 0.6);
@@ -42,7 +42,7 @@
 <div class="overlay"></div>
 
 <!-- Logo -->
-<img src="{{ asset('storage/volcomm-logo.png') }}" alt="Logo" class="logo">
+<img src="{{ Storage::disk('s3')->url('public/volcomm-logo.png') }}" alt="Logo" class="logo">
 
 <!-- Registration Form Container -->
 <div class="z-10 w-full max-w-lg bg-white rounded-lg shadow-lg p-8">

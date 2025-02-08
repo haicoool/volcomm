@@ -15,7 +15,7 @@
 <body class="h-screen flex items-center justify-center relative bg-gray-100">
 
 <!-- Background Image with Opacity -->
-<div class="absolute inset-0 bg-cover bg-center opacity-80" style="background-image: url('{{ asset('storage/bg-organization.jpg') }}');"></div>
+<div class="absolute inset-0 bg-cover bg-center opacity-80" style="background-image: url('{{ Storage::disk('s3')->url('public/bg-organization.jpg') }}');"></div>
 
 <!-- Login Form Container -->
 <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative transform transition-transform hover:scale-105 duration-500 ease-in-out">
