@@ -40,18 +40,23 @@ class VolunteerController extends Controller
         $profilePicPath = null;
         if ($request->hasFile('vProfilepic')) {
             $file = $request->file('vProfilepic');
-            $profilePicPath = $file->store('volunteer/profilepics', 's3'); // Store in S3
-            $profilePicPath = Storage::disk('s3')->url($profilePicPath); // Get public URL
+            // Store the file in the 'volunteer/profilepics' directory on S3
+            $profilePicPath = $file->store('volunteer/profilepics', 's3');
+            // Save only the filename in the database (e.g., 'volunteer/profilepics/lVf1CPSfdOOux6AdMXGw6rRU0cjGw3rMEI89VpoQ.jpg')
+            $profilePicFilename = basename($profilePicPath);
         }
 
         // Handle qualifications upload to S3
         $qualificationPaths = [];
         if ($request->hasFile('vQualification')) {
             foreach ($request->file('vQualification') as $file) {
-                $path = $file->store('volunteer/qualifications', 's3'); // Store in S3
-                $qualificationPaths[] = Storage::disk('s3')->url($path); // Get public URL
+                // Store the file in the 'volunteer/qualifications' directory on S3
+                $path = $file->store('volunteer/qualifications', 's3');
+                // Save only the filename in the database (e.g., 'volunteer/qualifications/qualification1.pdf')
+                $qualificationPaths[] = basename($path);
             }
         }
+
 
         // Create new volunteer
         $volunteer = new Volunteer();
