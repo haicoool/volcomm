@@ -33,7 +33,7 @@
         <!-- User Profile Section -->
         @if(Auth::check())
             <div class="flex items-center space-x-4 px-6 mb-6">
-                <img src="{{ Storage::disk('s3')->url('profilepics/' . Auth::user()->vProfilepic) }}" alt="Profile Picture" class="w-12 h-12 rounded-full shadow">
+                <img src="{{ Storage::disk('s3')->url('volunteer/profilepics/' . Auth::user()->vProfilepic) }}" alt="Profile Picture" class="w-12 h-12 rounded-full shadow">
                 <div>
                     <h2 class="text-lg font-semibold text-gray-900">Hi, {{ Auth::user()->vName }}</h2>
                 </div>
