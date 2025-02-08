@@ -36,17 +36,20 @@ class VolunteerController extends Controller
             'vQualification.*' => 'nullable|file|mimes:pdf,doc,docx,zip,jpeg,png,jpg,gif|max:5000',
         ]);
 
-        // Handle profile picture upload
+        // Handle profile picture upload to S3
         $profilePicPath = null;
         if ($request->hasFile('vProfilepic')) {
-            $profilePicPath = $request->file('vProfilepic')->store('volunteer/profilepics', 'public');
+            $file = $request->file('vProfilepic');
+            $profilePicPath = $file->store('volunteer/profilepics', 's3'); // Store in S3
+            $profilePicPath = Storage::disk('s3')->url($profilePicPath); // Get public URL
         }
 
-        // Handle qualifications upload
+        // Handle qualifications upload to S3
         $qualificationPaths = [];
         if ($request->hasFile('vQualification')) {
             foreach ($request->file('vQualification') as $file) {
-                $qualificationPaths[] = $file->store('volunteer/qualifications', 'public');
+                $path = $file->store('volunteer/qualifications', 's3'); // Store in S3
+                $qualificationPaths[] = Storage::disk('s3')->url($path); // Get public URL
             }
         }
 
