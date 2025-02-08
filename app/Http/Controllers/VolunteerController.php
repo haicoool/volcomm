@@ -243,15 +243,14 @@ class VolunteerController extends Controller
 
         if ($request->hasFile('vQualification')) {
             foreach ($request->file('vQualification') as $file) {
-                // Generate a random number prefix
+                // Generate a unique file name
                 $randomNumber = rand(1000, 9999);
-                // Get the original file name
                 $originalFileName = $file->getClientOriginalName();
-                // Create a new file name with the random prefix
                 $newFileName = $randomNumber . '-' . $originalFileName;
-                // Store the file and get the path
-                $path = $file->storeAs('volunteer/qualifications', $newFileName, 'public');
-                $qualificationPaths[] = $path;
+
+                // Store the file on S3 and get the path
+                $path = $file->storeAs('volunteer/qualifications', $newFileName, 's3');
+                $qualificationPaths[] = Storage::disk('s3')->url($path); // Get public URL
             }
 
             // Merge old qualifications with new ones
@@ -263,10 +262,11 @@ class VolunteerController extends Controller
 
         return view('volunteer.editProfile', [
             'volunteer' => $volunteer,
-            'activeSection' => 'qualifications', // Indicate that the qualifications section was updated
+            'activeSection' => 'qualifications',
             'success' => 'Qualifications added successfully!',
         ]);
     }
+
 
     // Remove Qualification
     public function removeQualification(Request $request)
@@ -275,15 +275,14 @@ class VolunteerController extends Controller
         $volunteer = Auth::user();
         $qualifications = json_decode($volunteer->vQualification, true);
 
-        // Remove the qualification
         if (($key = array_search($qualification, $qualifications)) !== false) {
             unset($qualifications[$key]);
 
-            // Full file path to delete the file
-            $filePath = 'storage/' . $qualification;
-            if (file_exists($filePath)) {
-                unlink($filePath); // Delete the file
-            }
+            // Extract the S3 file path from the full URL
+            $filePath = str_replace(Storage::disk('s3')->url(''), '', $qualification);
+
+            // Delete the file from S3
+            Storage::disk('s3')->delete($filePath);
 
             // Save the updated qualifications list
             $volunteer->vQualification = json_encode(array_values($qualifications));
@@ -296,7 +295,6 @@ class VolunteerController extends Controller
             'success' => 'Qualification removed successfully.',
         ]);
     }
-
 
     // Update Interests
     public function updateInterests(Request $request)

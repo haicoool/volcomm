@@ -217,7 +217,7 @@
                 @foreach(json_decode($volunteer->vQualification) as $qualification)
                     <div class="flex items-center justify-between mb-2">
                         <!-- Display file link -->
-                        <a href="{{ asset('storage/' . $qualification) }}" target="_blank" class="text-blue-500 hover:underline">{{ basename($qualification) }}</a>
+                        <a href="{{ $qualification }}" target="_blank" class="text-blue-500 hover:underline">{{ basename($qualification) }}</a>
                         <form action="{{ route('volunteer.remove-qualification') }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to remove this qualification?')">
                             @csrf
                             @method('DELETE')
