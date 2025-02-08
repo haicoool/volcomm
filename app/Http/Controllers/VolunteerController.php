@@ -278,11 +278,14 @@ class VolunteerController extends Controller
         if (($key = array_search($qualification, $qualifications)) !== false) {
             unset($qualifications[$key]);
 
-            // Extract the S3 file path from the full URL
-            $filePath = str_replace(Storage::disk('s3')->url(''), '', $qualification);
+            // Extract the file path from the full URL
+            $parsedUrl = parse_url($qualification);  // Parse the full URL
+            $filePath = ltrim($parsedUrl['path'], '/');  // Remove the leading slash from the path
 
             // Delete the file from S3
-            Storage::disk('s3')->delete($filePath);
+            if (!empty($filePath)) {
+                Storage::disk('s3')->delete($filePath);
+            }
 
             // Save the updated qualifications list
             $volunteer->vQualification = json_encode(array_values($qualifications));
@@ -295,6 +298,7 @@ class VolunteerController extends Controller
             'success' => 'Qualification removed successfully.',
         ]);
     }
+
 
     // Update Interests
     public function updateInterests(Request $request)
