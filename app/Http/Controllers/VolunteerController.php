@@ -213,7 +213,7 @@ class VolunteerController extends Controller
 
         // Handle profile picture upload
         if ($request->hasFile('vProfilepic')) {
-            $volunteer->vProfilepic = $request->file('vProfilepic')->store('volunteer/profilepics', 'public');
+            $volunteer->vProfilepic = $request->file('vProfilepic')->store('volunteer/profilepics', 's3');
         }
 
         // Update password if new password is provided
