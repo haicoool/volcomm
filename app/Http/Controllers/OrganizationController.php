@@ -162,10 +162,11 @@ class OrganizationController extends Controller
 
         // Handle the file upload if provided
         if ($request->hasFile('oppImage')) {
-            $imagePath = $request->file('oppImage')->store('opportunities', 'public');
+            $imagePath = $request->file('oppImage')->store('opportunities', 's3');
         } else {
             $imagePath = null;
         }
+
 
         // Create the opportunity in the database
         Opportunity::create([

@@ -10,7 +10,7 @@
         <!-- Opportunity Image -->
         @if($opportunity->oppImage)
             <div class="mb-8 text-center">
-                <img src="{{ asset('storage/' . $opportunity->oppImage) }}" alt="{{ $opportunity->oppTitle }}" class="w-full max-w-lg mx-auto rounded-lg shadow-md">
+                <img src="{{ Storage::disk('s3')->url($opportunity->oppImage) }}" alt="{{ $opportunity->oppTitle }}" class="w-full max-w-lg mx-auto rounded-lg shadow-md">
             </div>
         @endif
 

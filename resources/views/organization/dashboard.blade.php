@@ -56,7 +56,7 @@
 
                 <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg shadow-lg mb-6 flex items-center transition-transform transform hover:scale-105 hover:shadow-xl duration-200 overflow-hidden">
                     <!-- Image on the left -->
-                    <img class="h-40 w-40 rounded-lg object-cover shadow-md" src="{{ asset('storage/' . $opportunity->oppImage) }}" alt="Opportunity Image">
+                    <img class="h-40 w-40 rounded-lg object-cover shadow-md" src="{{ Storage::disk('s3')->url($opportunity->oppImage) }}" alt="Opportunity Image">
 
                     <!-- Opportunity details on the right -->
                     <div class="ml-6 flex-1">

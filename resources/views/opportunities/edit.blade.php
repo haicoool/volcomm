@@ -88,10 +88,12 @@
                 <label for="oppImage" class="block text-sm font-medium text-gray-600 mb-2">Opportunity Image</label>
                 <input type="file" name="oppImage" id="oppImage" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="previewImage(event)">
                 @if($opportunity->oppImage)
-                    <img src="{{ asset('storage/' . $opportunity->oppImage) }}" alt="Current Image" class="mt-2 w-32 h-32 object-cover">
+                    <!-- Display image from S3 -->
+                    <img src="{{ Storage::disk('s3')->url($opportunity->oppImage) }}" alt="Current Image" class="mt-2 w-32 h-32 object-cover">
                 @endif
                 <img id="imagePreview" class="mt-4 w-full h-auto rounded-lg" style="display: none;">
             </div>
+
         </div>
 
         <script>

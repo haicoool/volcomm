@@ -42,7 +42,7 @@
 
     <!-- Opportunity Image -->
     <div class="mb-6">
-        <img src="{{ asset('storage/' . $opportunity->oppImage) }}" alt="{{ $opportunity->oppTitle }}" class="w-full h-64 object-cover rounded-lg shadow-sm">
+        <img src="{{ Storage::disk('s3')->url($opportunity->oppImage) }}" alt="{{ $opportunity->oppTitle }}" class="w-full h-64 object-cover rounded-lg shadow-sm">
     </div>
 
     <!-- Opportunity Description -->
