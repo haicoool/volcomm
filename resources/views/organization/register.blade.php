@@ -10,10 +10,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet">
     <style>
         /* Background styling */
-        .register-bg {
-            background: url('{{ Storage::disk('s3')->url('volcomm/public/bg-org.png') }}') no-repeat center center;
-            background-size: cover;
-        }
+        {{--.register-bg {--}}
+        {{--    background: url('{{ Storage::disk('s3')->url('volcomm/public/bg-org.png') }}') no-repeat center center;--}}
+        {{--    background-size: cover;--}}
+        {{--}--}}
 
         .overlay {
             background: rgba(0, 0, 0, 0.6);
