@@ -270,9 +270,10 @@ class OrganizationController extends Controller
 
         // Handle logo upload if present
         if ($request->hasFile('logo')) {
-            // Store the logo in the 'public/logos' folder
-            $organization->logo = $request->file('logo')->store('logos', 'public'); // Save path relative to 'storage/app/public'
+            // Store the logo in the 'logos' folder on S3
+            $organization->logo = $request->file('logo')->store('logos', 's3'); // Save path on S3
         }
+
 
         // Save changes to organization
         $organization->save();

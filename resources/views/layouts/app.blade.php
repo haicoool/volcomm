@@ -22,7 +22,7 @@
                     <!-- Profile Picture Section -->
                     <div class="w-20 h-20">
                         <!-- Ensure the image is circular with larger size and darker hover effect -->
-                        <img src="{{ asset('storage/' . Auth::guard('organization')->user()->logo) }}" alt="Profile Picture"
+                        <img src="{{ Storage::disk('s3')->url(Auth::guard('organization')->user()->logo) }}" alt="Profile Picture"
                              class="w-20 h-20 rounded-full shadow bg-white object-cover">
                     </div>
                     <div>
