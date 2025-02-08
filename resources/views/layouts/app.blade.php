@@ -22,9 +22,16 @@
                     <!-- Profile Picture Section -->
                     <div class="w-20 h-20">
                         <!-- Ensure the image is circular with larger size and darker hover effect -->
-                        <img src="{{ Storage::disk('s3')->url(Auth::guard('organization')->user()->logo) }}" alt="Profile Picture"
-                             class="w-20 h-20 rounded-full shadow bg-white object-cover">
+                        @if(Auth::guard('organization')->user()->logo)
+                            <img src="{{ Storage::disk('s3')->url(Auth::guard('organization')->user()->logo) }}" alt="Profile Picture"
+                                 class="w-20 h-20 rounded-full shadow bg-white object-cover">
+                        @else
+                            <!-- Use the default logo from the S3 bucket if logo is null -->
+                            <img src="{{ Storage::disk('s3')->url('logos/org-icon.png') }}" alt="Default Logo"
+                                 class="w-20 h-20 rounded-full shadow bg-white object-cover">
+                        @endif
                     </div>
+
                     <div>
                         <h2 class="text-lg font-semibold">Hi, {{ Auth::guard('organization')->user()->organizationName }}</h2>
                         <!-- Debugging output for organizationId -->
