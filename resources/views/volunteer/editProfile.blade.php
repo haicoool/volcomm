@@ -216,10 +216,8 @@
             @if($volunteer->vQualification)
                 @foreach(json_decode($volunteer->vQualification) as $qualification)
                     <div class="flex items-center justify-between mb-2">
-                        <!-- Open modal button -->
-                        <button onclick="openModal('{{ $qualification }}')" class="text-blue-500 hover:underline">
-                            {{ basename($qualification) }}
-                        </button>
+                        <!-- Display file link -->
+                        <a href="{{ $qualification }}" target="_blank" class="text-blue-500 hover:underline">{{ basename($qualification) }}</a>
                         <form action="{{ route('volunteer.remove-qualification') }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to remove this qualification?')">
                             @csrf
                             @method('DELETE')
@@ -232,52 +230,6 @@
                 <p>No qualifications uploaded.</p>
             @endif
         </div>
-
-        <!-- Modal -->
-        <div id="qualificationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center">
-            <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-3/4 lg:w-1/2">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold">Qualification Preview</h3>
-                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">&times;</button>
-                </div>
-                <div id="qualificationContent" class="w-full max-h-[80vh] overflow-auto">
-                    <!-- File will be displayed here -->
-                </div>
-            </div>
-        </div>
-
-        <script>
-            function openModal(fileUrl) {
-                const modal = document.getElementById('qualificationModal');
-                const content = document.getElementById('qualificationContent');
-
-                // Clear previous content
-                content.innerHTML = '';
-
-                // Get file extension
-                const extension = fileUrl.split('.').pop().toLowerCase();
-
-                if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
-                    // Display images
-                    content.innerHTML = `<img src="${fileUrl}" class="w-full rounded-lg shadow-md">`;
-                } else if (extension === 'pdf') {
-                    // Display PDFs in iframe
-                    content.innerHTML = `<iframe src="${fileUrl}" class="w-full h-[500px]" frameborder="0"></iframe>`;
-                } else {
-                    // Download link for unsupported files (doc, zip, etc.)
-                    content.innerHTML = `<p class="text-gray-700">Cannot preview this file. <a href="${fileUrl}" target="_blank" class="text-blue-500 hover:underline">Download</a></p>`;
-                }
-
-                // Show modal
-                modal.classList.remove('hidden');
-            }
-
-            function closeModal() {
-                document.getElementById('qualificationModal').classList.add('hidden');
-            }
-        </script>
-
-
 
         <!-- Upload New Qualifications -->
         <form action="{{ route('volunteer.add-qualification') }}" method="POST" enctype="multipart/form-data">
