@@ -217,14 +217,14 @@
             @if($volunteer->vQualification)
                 @foreach(json_decode($volunteer->vQualification) as $qualification)
                     <div class="flex items-center justify-between mb-2">
-                        <!-- Generate a public URL for the S3 file -->
+                        <!-- Construct the full S3 path and generate a public URL -->
                         @php
-                            $filePath = str_replace('s3://', '', $qualification); // Remove the 's3://' prefix
-                            $fileUrl = Storage::disk('s3')->url($filePath); // Generate the public URL
+                            $s3Path = 'volunteer/qualifications/' . $qualification; // Construct the full S3 path
+                            $fileUrl = Storage::disk('s3')->url($s3Path); // Generate the public URL
                         @endphp
 
                             <!-- Display file link -->
-                        <a href="{{ $fileUrl }}" target="_blank" class="text-blue-500 hover:underline">{{ basename($qualification) }}</a>
+                        <a href="{{ $fileUrl }}" target="_blank" class="text-blue-500 hover:underline">{{ $qualification }}</a>
 
                         <form action="{{ route('volunteer.remove-qualification') }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to remove this qualification?')">
                             @csrf
