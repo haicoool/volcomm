@@ -29,9 +29,9 @@
 
         /* Logo inside the form container */
         .logo {
-            width: 150px; /* Adjust the width as needed */
+            width: 100px; /* Smaller logo */
             height: auto;
-            margin-bottom: 20px; /* Adds space below the logo */
+            margin-bottom: 10px; /* Reduced space below the logo */
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -51,17 +51,6 @@
             color: red;
         }
 
-        /* Landscape layout */
-        .landscape-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .landscape-form .full-width {
-            grid-column: span 2;
-        }
-
         /* Icon styling */
         .icon {
             margin-right: 0.5rem;
@@ -74,6 +63,13 @@
         .icon.invalid {
             color: red;
         }
+
+        /* Form container styling */
+        .form-container {
+            max-height: 90vh; /* Fixed height to fit the screen */
+            overflow-y: auto; /* Enable scrolling if content overflows */
+            padding: 1rem; /* Reduced padding */
+        }
     </style>
 </head>
 
@@ -81,15 +77,15 @@
 <div class="overlay"></div>
 
 <!-- Registration Form Container -->
-<div class="z-10 w-full max-w-4xl bg-white rounded-lg shadow-lg p-8">
+<div class="z-10 w-full max-w-md bg-white rounded-lg shadow-lg form-container">
     <!-- Logo inside the form -->
     <img src="{{ Storage::disk('s3')->url('public/volcomm-logo.png') }}" alt="Logo" class="logo">
 
-    <h2 class="text-3xl font-bold text-center mb-8">Volunteer Registration</h2>
+    <h2 class="text-2xl font-bold text-center mb-4">Volunteer Registration</h2>
 
     <!-- Errors Display -->
     @if ($errors->any())
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded relative mb-3 text-sm" role="alert">
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -99,33 +95,33 @@
     @endif
 
     <!-- Registration Form -->
-    <form method="POST" action="{{ route('volunteer.register') }}" enctype="multipart/form-data" class="landscape-form">
+    <form method="POST" action="{{ route('volunteer.register') }}" enctype="multipart/form-data" class="space-y-3 px-4">
         @csrf
 
         <!-- Full Name -->
-        <div class="mb-4">
+        <div>
             <label for="vName" class="block text-sm font-medium text-gray-700">Full Name</label>
             <input type="text" name="vName" id="vName"
-                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm"
                    required>
         </div>
 
         <!-- Email -->
-        <div class="mb-4">
+        <div>
             <label for="vEmail" class="block text-sm font-medium text-gray-700">Email</label>
             <input type="email" name="vEmail" id="vEmail"
-                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm"
                    required>
         </div>
 
         <!-- Password -->
-        <div class="mb-4 full-width">
+        <div>
             <label for="vPass" class="block text-sm font-medium text-gray-700">Password</label>
             <input type="password" name="vPass" id="vPass"
-                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm"
                    required>
             <!-- Password Requirements -->
-            <div id="password-requirements" class="mt-2 text-sm text-gray-600">
+            <div id="password-requirements" class="mt-2 text-sm text-gray-600 space-y-1">
                 <div class="flex items-center" id="uppercase-requirement">
                     <span class="icon invalid"><i class="fas fa-times"></i></span>
                     <span>At least one uppercase letter</span>
@@ -142,50 +138,48 @@
         </div>
 
         <!-- Confirm Password -->
-        <div class="mb-4 full-width">
+        <div>
             <label for="vPass_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
             <input type="password" name="vPass_confirmation" id="vPass_confirmation"
-                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm"
                    required>
             <div id="confirm-password-validation" class="validation-message"></div>
         </div>
 
         <!-- Volunteer Skill -->
-        <div class="mb-4">
+        <div>
             <label for="vSkill" class="block text-sm font-medium text-gray-700">Skill</label>
             <input type="text" name="vSkill" id="vSkill"
-                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
         </div>
 
         <!-- Profile Picture -->
-        <div class="mb-4">
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="vProfilepic">Profile
-                Picture</label>
+        <div>
+            <label class="block text-sm font-medium text-gray-700" for="vProfilepic">Profile Picture</label>
             <input
-                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-gray-50 focus:outline-none"
                 id="vProfilepic" name="vProfilepic" type="file" accept="image/*">
         </div>
 
         <!-- Qualification (Multiple Files) -->
-        <div class="mb-4 full-width">
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                   for="vQualification">Qualifications (Upload multiple files)</label>
+        <div>
+            <label class="block text-sm font-medium text-gray-700" for="vQualification">Qualifications (Upload multiple files)</label>
             <input
-                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-gray-50 focus:outline-none"
                 id="vQualification" name="vQualification[]" type="file" multiple>
         </div>
 
         <!-- Submit Button -->
-        <div class="flex justify-between full-width">
+        <div class="flex justify-between pt-4">
             <!-- Back Button -->
             <a href="{{ url()->previous() }}"
-               class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 focus:outline-none focus:ring focus:border-gray-300">
+               class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 focus:outline-none focus:ring focus:border-gray-300 text-sm">
                 Back
             </a>
 
             <!-- Register Button -->
             <button type="submit"
-                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300">
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300 text-sm">
                 Register
             </button>
         </div>

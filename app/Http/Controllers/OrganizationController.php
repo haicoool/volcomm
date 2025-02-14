@@ -28,8 +28,15 @@ class OrganizationController extends Controller
         $validated = $request->validate([
             'organizationName' => 'required|string|max:255',
             'organizationEmail' => 'required|email|unique:organizations,organizationEmail',
-            'organizationPass' => 'required|confirmed|min:6',
+            'organizationPass' => [
+                'required',
+                'confirmed',
+                'min:6',
+                'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:\'"\\|,.<>\/?]).+$/',
+            ],
             'organizationAbout' => 'nullable|string|max:1000',
+        ], [
+            'organizationPass.regex' => 'The password must contain at least one uppercase letter, one number, and one symbol.',
         ]);
 
         // Create the organization in the database
@@ -41,7 +48,7 @@ class OrganizationController extends Controller
             'isApproved' => 0, // Set default value
         ]);
 
-        // Redirect with a success message indicating the registration is under review, with a yellow color
+        // Redirect with a success message indicating the registration is under review
         return redirect()->back()->with('warning', 'Registration submitted for review.');
     }
 
