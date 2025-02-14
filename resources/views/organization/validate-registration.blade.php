@@ -36,7 +36,8 @@
                             @endphp
 
                             @if($qualification)
-                                <a href="{{ asset('storage/' . $qualification) }}" target="_blank" class="text-blue-600 hover:underline">{{ basename($qualification) }}</a>
+                                <!-- Generate S3 URL for the qualification file -->
+                                <a href="{{ Storage::disk('s3')->url($qualification) }}" target="_blank" class="text-blue-600 hover:underline">{{ basename($qualification) }}</a>
                             @else
                                 N/A
                             @endif
