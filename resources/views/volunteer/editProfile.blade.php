@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Storage; @endphp
 @extends('layouts.volunteer-app')
 
 @section('title', 'Edit Profile')
@@ -216,8 +217,15 @@
             @if($volunteer->vQualification)
                 @foreach(json_decode($volunteer->vQualification) as $qualification)
                     <div class="flex items-center justify-between mb-2">
-                        <!-- Display file link -->
-                        <a href="{{ $qualification }}" target="_blank" class="text-blue-500 hover:underline">{{ basename($qualification) }}</a>
+                        <!-- Generate a public URL for the S3 file -->
+                        @php
+                            $filePath = str_replace('s3://', '', $qualification); // Remove the 's3://' prefix
+                            $fileUrl = Storage::disk('s3')->url($filePath); // Generate the public URL
+                        @endphp
+
+                            <!-- Display file link -->
+                        <a href="{{ $fileUrl }}" target="_blank" class="text-blue-500 hover:underline">{{ basename($qualification) }}</a>
+
                         <form action="{{ route('volunteer.remove-qualification') }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to remove this qualification?')">
                             @csrf
                             @method('DELETE')
