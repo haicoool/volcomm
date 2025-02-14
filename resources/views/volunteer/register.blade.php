@@ -8,6 +8,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet">
+    <!-- Include Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         /* Background styling */
         .register-bg {
@@ -35,10 +37,7 @@
             margin-right: auto;
         }
 
-        .icon {
-            font-size: 1rem;
-        }
-
+        /* Password validation messages */
         .validation-message {
             font-size: 0.875rem;
             margin-top: 0.25rem;
@@ -51,6 +50,30 @@
         .validation-message.invalid {
             color: red;
         }
+
+        /* Landscape layout */
+        .landscape-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .landscape-form .full-width {
+            grid-column: span 2;
+        }
+
+        /* Icon styling */
+        .icon {
+            margin-right: 0.5rem;
+        }
+
+        .icon.valid {
+            color: green;
+        }
+
+        .icon.invalid {
+            color: red;
+        }
     </style>
 </head>
 
@@ -58,7 +81,7 @@
 <div class="overlay"></div>
 
 <!-- Registration Form Container -->
-<div class="z-10 w-full max-w-lg bg-white rounded-lg shadow-lg p-8">
+<div class="z-10 w-full max-w-4xl bg-white rounded-lg shadow-lg p-8">
     <!-- Logo inside the form -->
     <img src="{{ Storage::disk('s3')->url('public/volcomm-logo.png') }}" alt="Logo" class="logo">
 
@@ -76,7 +99,7 @@
     @endif
 
     <!-- Registration Form -->
-    <form method="POST" action="{{ route('volunteer.register') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('volunteer.register') }}" enctype="multipart/form-data" class="landscape-form">
         @csrf
 
         <!-- Full Name -->
@@ -96,7 +119,7 @@
         </div>
 
         <!-- Password -->
-        <div class="mb-4">
+        <div class="mb-4 full-width">
             <label for="vPass" class="block text-sm font-medium text-gray-700">Password</label>
             <input type="password" name="vPass" id="vPass"
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
@@ -104,22 +127,22 @@
             <!-- Password Requirements -->
             <div id="password-requirements" class="mt-2 text-sm text-gray-600">
                 <div class="flex items-center" id="uppercase-requirement">
-                    <span class="icon mr-2">❌</span>
+                    <span class="icon invalid"><i class="fas fa-times"></i></span>
                     <span>At least one uppercase letter</span>
                 </div>
                 <div class="flex items-center" id="number-requirement">
-                    <span class="icon mr-2">❌</span>
+                    <span class="icon invalid"><i class="fas fa-times"></i></span>
                     <span>At least one number</span>
                 </div>
                 <div class="flex items-center" id="symbol-requirement">
-                    <span class="icon mr-2">❌</span>
+                    <span class="icon invalid"><i class="fas fa-times"></i></span>
                     <span>At least one symbol</span>
                 </div>
             </div>
         </div>
 
         <!-- Confirm Password -->
-        <div class="mb-4">
+        <div class="mb-4 full-width">
             <label for="vPass_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
             <input type="password" name="vPass_confirmation" id="vPass_confirmation"
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
@@ -144,7 +167,7 @@
         </div>
 
         <!-- Qualification (Multiple Files) -->
-        <div class="mb-4">
+        <div class="mb-4 full-width">
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                    for="vQualification">Qualifications (Upload multiple files)</label>
             <input
@@ -153,7 +176,7 @@
         </div>
 
         <!-- Submit Button -->
-        <div class="flex justify-between">
+        <div class="flex justify-between full-width">
             <!-- Back Button -->
             <a href="{{ url()->previous() }}"
                class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 focus:outline-none focus:ring focus:border-gray-300">
@@ -185,15 +208,27 @@
 
         // Check for uppercase letter
         const hasUppercase = /[A-Z]/.test(password);
-        uppercaseRequirement.querySelector('.icon').textContent = hasUppercase ? '✅' : '❌';
+        const uppercaseIcon = uppercaseRequirement.querySelector('.icon i');
+        uppercaseIcon.classList.toggle('fa-check', hasUppercase);
+        uppercaseIcon.classList.toggle('fa-times', !hasUppercase);
+        uppercaseRequirement.querySelector('.icon').classList.toggle('valid', hasUppercase);
+        uppercaseRequirement.querySelector('.icon').classList.toggle('invalid', !hasUppercase);
 
         // Check for number
         const hasNumber = /[0-9]/.test(password);
-        numberRequirement.querySelector('.icon').textContent = hasNumber ? '✅' : '❌';
+        const numberIcon = numberRequirement.querySelector('.icon i');
+        numberIcon.classList.toggle('fa-check', hasNumber);
+        numberIcon.classList.toggle('fa-times', !hasNumber);
+        numberRequirement.querySelector('.icon').classList.toggle('valid', hasNumber);
+        numberRequirement.querySelector('.icon').classList.toggle('invalid', !hasNumber);
 
         // Check for symbol
         const hasSymbol = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
-        symbolRequirement.querySelector('.icon').textContent = hasSymbol ? '✅' : '❌';
+        const symbolIcon = symbolRequirement.querySelector('.icon i');
+        symbolIcon.classList.toggle('fa-check', hasSymbol);
+        symbolIcon.classList.toggle('fa-times', !hasSymbol);
+        symbolRequirement.querySelector('.icon').classList.toggle('valid', hasSymbol);
+        symbolRequirement.querySelector('.icon').classList.toggle('invalid', !hasSymbol);
     });
 
     confirmPasswordInput.addEventListener('input', () => {
