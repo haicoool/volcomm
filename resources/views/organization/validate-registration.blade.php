@@ -32,12 +32,15 @@
                         <td class="px-6 py-4 text-gray-700">{{ $registration->opportunity->oppTitle ?? 'N/A' }}</td>
                         <td class="px-6 py-4 text-gray-700">
                             @php
+                                // Decode the qualification file name
                                 $qualification = json_decode($registration->vQualification);
+                                // Construct the full S3 path
+                                $s3Path = 'volunteer/qualifications/' . $qualification;
                             @endphp
 
-                            @if($qualification)
+                            @if($qualification && Storage::disk('s3')->exists($s3Path))
                                 <!-- Generate S3 URL for the qualification file -->
-                                <a href="{{ Storage::disk('s3')->url($qualification) }}" target="_blank" class="text-blue-600 hover:underline">{{ basename($qualification) }}</a>
+                                <a href="{{ Storage::disk('s3')->url($s3Path) }}" target="_blank" class="text-blue-600 hover:underline">{{ $qualification }}</a>
                             @else
                                 N/A
                             @endif
