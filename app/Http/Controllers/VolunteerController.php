@@ -30,7 +30,12 @@ class VolunteerController extends Controller
         $request->validate([
             'vName' => 'required|string|max:255',
             'vEmail' => 'required|email|unique:volunteers',
-            'vPass' => 'required|min:6|confirmed',
+            'vPass' => [
+                'required',
+                'min:6',
+                'confirmed',
+                'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:\'"\\|,.<>\/?]).+$/',
+            ],
             'vSkill' => 'nullable|string',
             'vProfilepic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'vQualification.*' => 'nullable|file|mimes:pdf,doc,docx,zip,jpeg,png,jpg,gif|max:5000',
@@ -40,23 +45,17 @@ class VolunteerController extends Controller
         $profilePicPath = null;
         if ($request->hasFile('vProfilepic')) {
             $file = $request->file('vProfilepic');
-            // Store the file in the 'volunteer/profilepics' directory on S3
             $profilePicPath = $file->store('volunteer/profilepics', 's3');
-            // Save only the filename in the database (e.g., 'volunteer/profilepics/lVf1CPSfdOOux6AdMXGw6rRU0cjGw3rMEI89VpoQ.jpg')
-            $profilePicFilename = basename($profilePicPath);
         }
 
         // Handle qualifications upload to S3
         $qualificationPaths = [];
         if ($request->hasFile('vQualification')) {
             foreach ($request->file('vQualification') as $file) {
-                // Store the file in the 'volunteer/qualifications' directory on S3
                 $path = $file->store('volunteer/qualifications', 's3');
-                // Save only the filename in the database (e.g., 'volunteer/qualifications/qualification1.pdf')
                 $qualificationPaths[] = basename($path);
             }
         }
-
 
         // Create new volunteer
         $volunteer = new Volunteer();

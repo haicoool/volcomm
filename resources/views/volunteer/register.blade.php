@@ -34,6 +34,20 @@
             margin-left: auto;
             margin-right: auto;
         }
+
+        /* Password validation messages */
+        .validation-message {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .validation-message.valid {
+            color: green;
+        }
+
+        .validation-message.invalid {
+            color: red;
+        }
     </style>
 </head>
 
@@ -84,6 +98,9 @@
             <input type="password" name="vPass" id="vPass"
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                    required>
+            <div id="password-validation" class="validation-message invalid">
+                Password must contain at least one uppercase letter, one number, and one symbol.
+            </div>
         </div>
 
         <!-- Confirm Password -->
@@ -92,6 +109,9 @@
             <input type="password" name="vPass_confirmation" id="vPass_confirmation"
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                    required>
+            <div id="confirm-password-validation" class="validation-message invalid">
+                Passwords do not match.
+            </div>
         </div>
 
         <!-- Volunteer Skill -->
@@ -135,6 +155,43 @@
         </div>
     </form>
 </div>
+
+<script>
+    // Password validation
+    const passwordInput = document.getElementById('vPass');
+    const passwordValidation = document.getElementById('password-validation');
+    const confirmPasswordInput = document.getElementById('vPass_confirmation');
+    const confirmPasswordValidation = document.getElementById('confirm-password-validation');
+
+    passwordInput.addEventListener('input', () => {
+        const password = passwordInput.value;
+        const hasUppercase = /[A-Z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSymbol = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+
+        if (hasUppercase && hasNumber && hasSymbol) {
+            passwordValidation.textContent = 'Password is valid.';
+            passwordValidation.classList.remove('invalid');
+            passwordValidation.classList.add('valid');
+        } else {
+            passwordValidation.textContent = 'Password must contain at least one uppercase letter, one number, and one symbol.';
+            passwordValidation.classList.remove('valid');
+            passwordValidation.classList.add('invalid');
+        }
+    });
+
+    confirmPasswordInput.addEventListener('input', () => {
+        if (confirmPasswordInput.value === passwordInput.value) {
+            confirmPasswordValidation.textContent = 'Passwords match.';
+            confirmPasswordValidation.classList.remove('invalid');
+            confirmPasswordValidation.classList.add('valid');
+        } else {
+            confirmPasswordValidation.textContent = 'Passwords do not match.';
+            confirmPasswordValidation.classList.remove('valid');
+            confirmPasswordValidation.classList.add('invalid');
+        }
+    });
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
 </body>
