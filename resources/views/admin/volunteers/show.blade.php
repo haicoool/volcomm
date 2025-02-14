@@ -1,13 +1,13 @@
 @extends('layouts.admin-app')
 
 @section('content')
-    <div class="flex justify-center items-center min-h-screen 0">
+    <div class="flex justify-center items-center min-h-screen">
         <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
             <!-- Profile Picture Section -->
             <div class="flex flex-col items-center mb-6">
                 @if ($volunteer->vProfilepic)
                     <!-- Use volunteer's profile picture -->
-                    <img src="{{ Storage::disk('s3')->url($volunteer->vProfilepic) }}">
+                    <img src="{{ Storage::disk('s3')->url($volunteer->vProfilepic) }}"
                          alt="Profile Picture"
                          class="h-32 w-32 rounded-full object-cover border-2 border-gray-300 mb-4">
                 @else
