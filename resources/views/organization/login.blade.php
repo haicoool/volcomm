@@ -66,12 +66,6 @@
             <a href="{{ route('organization.register') }}" class="text-blue-500 hover:underline">Register here</a>
         </p>
     </div>
-
-    <!-- Forgot Password Link -->
-    <div class="text-center mt-4">
-        <a href="{{ route('organization.forgot-password') }}" class="text-blue-500 hover:underline">Forgot Password?</a>
-    </div>
-
 </div>
 
 <!-- Flowbite JS -->

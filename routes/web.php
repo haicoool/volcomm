@@ -105,12 +105,6 @@ Route::prefix('organization')->group(function () {
 
 });
 
-// Organization Forgot & Reset Password Routes
-Route::get('/organization/forgot-password', [OrganizationController::class, 'showForgotPasswordForm'])->name('organization.forgot-password');
-Route::post('/organization/forgot-password', [OrganizationController::class, 'sendResetLink']);
-Route::get('/organization/reset-password/{token}', [OrganizationController::class, 'showResetPasswordForm'])->name('organization.reset-password');
-Route::post('/organization/reset-password', [OrganizationController::class, 'resetPassword']);
-
 Route::get('/opportunities/manage/{id}', [OpportunityController::class, 'manage'])->name('opportunities.manage');
 Route::get('/opportunities/{id}/edit', [OpportunityController::class, 'edit'])->name('opportunities.edit');
 Route::delete('/opportunities/{id}', [OpportunityController::class, 'destroy'])->name('opportunities.destroy');
