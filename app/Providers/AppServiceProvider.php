@@ -4,9 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use App\Models\Registration;
-use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,14 +26,10 @@ class AppServiceProvider extends ServiceProvider
         if (env('APP_ENV') === 'production') {
             URL::forceScheme('https');
         }
-        
-        DB::listen(function ($query) {
-            Log::info("Query executed: {$query->sql} with bindings: " . json_encode($query->bindings));
-        });
-        // Share the pending registration count with all views
-        View::composer('*', function ($view) {
-            $pendingCount = Registration::where('status', 'pending')->count();
-            $view->with('pendingCount', $pendingCount);
-        });
+
+        // Uncomment below to log database queries
+        // DB::listen(function ($query) {
+        //     Log::info("Query executed: {$query->sql} with bindings: " . json_encode($query->bindings));
+        // });
     }
 }
