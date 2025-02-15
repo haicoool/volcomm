@@ -56,6 +56,11 @@ Route::prefix('volunteer')->group(function () {
 
 });
 
+Route::get('/volunteer/password/reset', [VolunteerController::class, 'showResetRequestForm'])->name('volunteer.password.request');
+Route::post('/volunteer/password/email', [VolunteerController::class, 'sendResetLinkEmail'])->name('volunteer.password.email');
+Route::get('/volunteer/password/reset/{token}', [VolunteerController::class, 'showResetForm'])->name('volunteer.password.reset');
+Route::post('/volunteer/password/reset', [VolunteerController::class, 'reset'])->name('volunteer.password.update');
+
 Route::post('/volunteer/update-interests', [VolunteerController::class, 'updateInterests'])->name('volunteer.update-interests');
 
 Route::get('/certificate/download/{registrationId}', [VolunteerController::class, 'downloadCertificate'])->name('downloadCertificate');

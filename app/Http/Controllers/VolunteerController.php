@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Mail\RegistrationNotification;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+use App\Models\PasswordResetToken;
+use App\Mail\VolunteerPasswordReset;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class VolunteerController extends Controller
 {
@@ -345,5 +350,101 @@ class VolunteerController extends Controller
         // Pass the registrations to the view
         return view('volunteer.history', compact('registrations'));
     }
+
+    public function showResetRequestForm()
+    {
+        return view('volunteer.password.request');
+    }
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $request->validate(['vEmail' => 'required|email']);
+
+        $volunteer = Volunteer::where('vEmail', $request->vEmail)->first();
+
+        if (!$volunteer) {
+            return back()->with([
+                'alert_type' => 'error',
+                'alert_title' => 'Email Not Found',
+                'alert_message' => 'We can\'t find a volunteer with that email address.'
+            ]);
+        }
+
+        $token = Str::random(60);
+        $email = $volunteer->vEmail;
+
+        PasswordResetToken::updateOrCreate(
+            ['email' => $email],
+            ['token' => $token, 'created_at' => now()] // Store as plain text
+        );
+
+        Mail::to($email)->send(new VolunteerPasswordReset($token));
+
+        return back()->with([
+            'alert_type' => 'success',
+            'alert_title' => 'Success!',
+            'alert_message' => 'We have emailed your password reset link!'
+        ]);
+    }
+
+
+    public function showResetForm($token)
+    {
+        $resetData = PasswordResetToken::where('token', $token)->first();
+
+        if (!$resetData) {
+            return redirect()->route('volunteer.password.request')
+                ->with([
+                    'alert_type' => 'error',
+                    'alert_title' => 'Invalid Token',
+                    'alert_message' => 'This password reset link is invalid or expired.'
+                ]);
+        }
+
+        if (Carbon::parse($resetData->created_at)->addMinutes(10)->isPast()) {
+            return redirect()->route('volunteer.password.request')
+                ->with([
+                    'alert_type' => 'error',
+                    'alert_title' => 'Expired Link',
+                    'alert_message' => 'This password reset link has expired.'
+                ]);
+        }
+
+        return view('volunteer.password.reset', ['token' => $token]);
+    }
+
+    public function reset(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'vEmail' => 'required|email',
+            'vPass' => 'required|min:6|confirmed',
+        ]);
+
+        $resetData = PasswordResetToken::where([
+            ['email', $request->vEmail],
+            ['token', $request->token], // Compare plain text token
+        ])->first();
+
+        if (!$resetData) {
+            return back()->withErrors(['vEmail' => 'Invalid token.']);
+        }
+
+        // Check if the token is expired (10 minutes)
+        if (Carbon::parse($resetData->created_at)->addMinutes(10)->isPast()) {
+            return back()->withErrors(['vEmail' => 'Token expired.']);
+        }
+
+        // Update the volunteer's password
+        $volunteer = Volunteer::where('vEmail', $request->vEmail)->first();
+        $volunteer->vPass = Hash::make($request->vPass);
+        $volunteer->save();
+
+        // Delete the token
+        $resetData->delete();
+
+        return redirect()->route('volunteer.login')->with('status', 'Your password has been reset!');
+    }
+
 
 }

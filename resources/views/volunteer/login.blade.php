@@ -15,7 +15,7 @@
 <body class="min-h-screen flex items-center justify-center relative bg-gray-100">
 
 <!-- Background Image with Opacity -->
-<div class="absolute inset-0 bg-cover bg-center opacity-90" style="background-image: url('{{ Storage::disk('s3')->url('public/bg-volunteer.jpg') }}');"></div>
+<div class="absolute inset-0 bg-cover bg-center opacity-90" style="background-image: url('{{ asset('storage/bg-volunteer.jpg') }}');"></div>
 
 <div class="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg relative transform transition-all duration-500 hover:scale-105">
     <!-- Back to home button -->
@@ -40,7 +40,6 @@
     <!-- Login Form -->
     <form method="POST" action="{{ route('volunteer.login') }}">
         @csrf
-
         <!-- Email Input -->
         <div class="mb-5">
             <label for="vEmail" class="block text-sm font-medium text-gray-700">Email</label>
@@ -58,6 +57,11 @@
             <button type="submit" class="w-full px-4 py-2 text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg hover:from-blue-600 hover:to-purple-700 focus:ring-4 focus:ring-blue-300 transform transition-all duration-300 hover:scale-105">
                 Login
             </button>
+        </div>
+
+        <!-- Forgot Password Link -->
+        <div class="text-center mt-4">
+            <a href="{{ route('volunteer.password.request') }}" class="text-blue-500 hover:underline">Forgot Password?</a>
         </div>
     </form>
 
