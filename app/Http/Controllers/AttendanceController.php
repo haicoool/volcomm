@@ -12,12 +12,14 @@ class AttendanceController extends Controller
     // Display opportunities for the current organization
     public function confirmAttendance(Request $request)
     {
-        $organizationId = auth()->user()->organizationId; // Assuming the organizationId is in the user model
+        $organizationId = auth()->user()->organizationId; // Get the logged-in organization's ID
 
         // Fetch opportunities where at least one registration has 'Pending' status
         $opportunities = Opportunity::where('organizationId', $organizationId)
-            ->whereHas('registrations', function ($query) {
-                $query->where('status', 'Pending');
+            ->whereIn('oppId', function ($query) {
+                $query->select('oppId')
+                    ->from('registrations')
+                    ->where('status', 'Pending');
             })
             ->get();
 
