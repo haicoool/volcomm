@@ -14,18 +14,17 @@ class AttendanceController extends Controller
     {
         $organizationId = auth()->user()->organizationId; // Get the logged-in organization's ID
 
-        // Fetch opportunities where at least one registration has 'Pending' status
+        // Fetch opportunities where at least one registration has 'registered' status
         $opportunities = Opportunity::where('organizationId', $organizationId)
             ->whereIn('oppId', function ($query) {
                 $query->select('oppId')
                     ->from('registrations')
-                    ->where('status', 'Pending');
+                    ->where('status', 'registered'); // Change from 'Pending' to 'registered'
             })
             ->get();
 
         return view('organization.opportunities', compact('opportunities'));
     }
-
 
     // Show registrations for a selected opportunity
     public function showRegistrations($oppId)
