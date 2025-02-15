@@ -23,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Enable HTTPS in production and staging environments
+        if (env('APP_ENV') === 'production') {
+            URL::forceScheme('https');
+        }
+        
         DB::listen(function ($query) {
             Log::info("Query executed: {$query->sql} with bindings: " . json_encode($query->bindings));
         });
