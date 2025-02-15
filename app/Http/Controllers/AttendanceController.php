@@ -13,15 +13,17 @@ class AttendanceController extends Controller
     public function confirmAttendance(Request $request)
     {
         $organizationId = auth()->user()->organizationId; // Assuming the organizationId is in the user model
-        $currentDate = now()->startOfDay(); // Get the current date (start of the day)
 
-        // Fetch opportunities with a date greater than or equal to today
+        // Fetch opportunities where at least one registration has 'Pending' status
         $opportunities = Opportunity::where('organizationId', $organizationId)
-            ->where('oppDate', '>=', $currentDate)
+            ->whereHas('registrations', function ($query) {
+                $query->where('status', 'Pending');
+            })
             ->get();
 
-        return view('organization.opportunities', compact('opportunities', 'currentDate'));
+        return view('organization.opportunities', compact('opportunities'));
     }
+
 
     // Show registrations for a selected opportunity
     public function showRegistrations($oppId)
