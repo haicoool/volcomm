@@ -15,7 +15,7 @@
 <body class="min-h-screen flex items-center justify-center relative bg-gray-100">
 
 <!-- Background Image with Opacity -->
-<div class="absolute inset-0 bg-cover bg-center opacity-90" style="background-image: url('{{ asset('storage/bg-volunteer.jpg') }}');"></div>
+<div class="absolute inset-0 bg-cover bg-center opacity-90" style="background-image: url('{{ Storage::disk('s3')->url('public/bg-volunteer.jpg') }}');"></div>
 
 <div class="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg relative transform transition-all duration-500 hover:scale-105">
     <!-- Back to home button -->
