@@ -15,17 +15,21 @@
                     <th class="py-3 px-4 text-left text-gray-600 font-semibold">Title</th>
                     <th class="py-3 px-4 text-left text-gray-600 font-semibold">Description</th>
                     <th class="py-3 px-4 text-left text-gray-600 font-semibold">Location</th>
+                    <th class="py-3 px-4 text-center text-gray-600 font-semibold">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($opportunities as $opportunity)
-                    <tr
-                        class="border-b hover:bg-gray-100 cursor-pointer"
-                        onclick="window.location='{{ $opportunity->oppDate->toDateString() === $currentDate->toDateString() ? route('registrations.show', $opportunity->oppId) : 'javascript:void(0)' }}'"
-                    >
+                    <tr class="border-b hover:bg-gray-100">
                         <td class="py-4 px-4 text-left">{{ $opportunity->oppTitle }}</td>
                         <td class="py-4 px-4 text-left">{{ $opportunity->oppDesc }}</td>
                         <td class="py-4 px-4 text-left">{{ $opportunity->oppLocation }}</td>
+                        <td class="py-4 px-4 text-center">
+                            <a href="{{ route('registrations.show', $opportunity->oppId) }}"
+                               class="inline-block px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-300">
+                                View Volunteer List
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

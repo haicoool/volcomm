@@ -12,10 +12,16 @@ class CertificateController extends Controller
 {
     public function showPastOpportunities()
     {
-        $opportunities = auth()->user()->pastOpportunities()->with('registrations')->get();
+        $currentDate = now()->toDateString(); // Get today's date
+
+        $opportunities = auth()->user()->pastOpportunities()
+            ->with('registrations')
+            ->whereDate('oppDate', $currentDate) // Filter for today's date
+            ->get();
 
         return view('certificates.past_opportunities', compact('opportunities'));
     }
+
 
     public function showCertificateForm(Registration $registration)
     {
