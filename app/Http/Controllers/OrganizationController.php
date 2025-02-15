@@ -307,5 +307,61 @@ class OrganizationController extends Controller
         return redirect()->route('organization.login')->with('success', 'Logged out successfully!');
     }
 
+    // Handle Forgot Password Request
+    public function sendResetLink(Request $request)
+    {
+        $request->validate(['email' => 'required|email|exists:organizations,organizationEmail']);
+
+        // Generate Token & Save in Password Reset Table
+        $token = Str::random(64);
+        \DB::table('password_resets')->insert([
+            'email' => $request->email,
+            'token' => $token,
+            'created_at' => now(),
+        ]);
+
+        // Generate Reset Link
+        $resetLink = route('organization.reset-password', ['token' => $token, 'email' => $request->email]);
+
+        // For now, show the reset link instead of sending an email
+        return back()->with('status', "Click here to reset your password: <a href='$resetLink' class='text-blue-500'>$resetLink</a>");
+    }
+
+    // Show Reset Password Form
+    public function showResetPasswordForm($token)
+    {
+        return view('organization.reset-password', compact('token'));
+    }
+
+    // Handle Password Reset
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:organizations,organizationEmail',
+            'password' => 'required|min:6|confirmed',
+            'token' => 'required',
+        ]);
+
+        // Find token
+        $reset = \DB::table('password_resets')
+            ->where('email', $request->email)
+            ->where('token', $request->token)
+            ->first();
+
+        if (!$reset) {
+            return back()->withErrors(['email' => 'Invalid or expired token.']);
+        }
+
+        // Update Organization Password
+        $organization = Organization::where('organizationEmail', $request->email)->first();
+        $organization->password = Hash::make($request->password);
+        $organization->save();
+
+        // Delete Token
+        \DB::table('password_resets')->where('email', $request->email)->delete();
+
+        return redirect()->route('organization.login')->with('success', 'Password reset successful! Please login.');
+    }
+
 
 }
