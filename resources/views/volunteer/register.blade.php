@@ -156,18 +156,18 @@
         <!-- Profile Picture -->
         <div>
             <label class="block text-sm font-medium text-gray-700" for="vProfilepic">Profile Picture</label>
-            <input
-                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-gray-50 focus:outline-none"
-                id="vProfilepic" name="vProfilepic" type="file" accept="image/*">
+            <input id="vProfilepic" type="file" accept="image/*">
+            <button type="button" id="uploadProfilePic">Upload Profile Picture</button>
+            <input type="hidden" name="vProfilepic" id="profilePicPath">
             <p class="mt-1 text-sm text-gray-500">Max file size: 10MB (JPEG, PNG, JPG, GIF).</p>
         </div>
 
         <!-- Qualification (Multiple Files) -->
         <div>
             <label class="block text-sm font-medium text-gray-700" for="vQualification">Qualifications</label>
-            <input
-                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-gray-50 focus:outline-none"
-                id="vQualification" name="vQualification[]" type="file" multiple>
+            <input id="vQualification" type="file" multiple>
+            <button type="button" id="uploadQualifications">Upload Qualifications</button>
+            <input type="hidden" name="vQualification" id="qualificationPaths">
             <p class="mt-1 text-sm text-gray-500">Max file size per file: 10MB (PDF, DOC, DOCX, ZIP, JPEG, PNG, JPG, GIF).</p>
         </div>
 
@@ -249,6 +249,69 @@
         }
     });
 </script>
+
+<script>
+    document.getElementById('uploadProfilePic').addEventListener('click', async () => {
+        const fileInput = document.getElementById('vProfilepic');
+        if (fileInput.files.length === 0) return alert('Select a file first!');
+
+        const file = fileInput.files[0];
+
+        // Get Presigned URL from Laravel
+        const response = await fetch('/api/s3-presigned-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: file.name, filetype: file.type })
+        });
+
+        const { url } = await response.json();
+
+        // Upload to S3
+        const uploadResponse = await fetch(url, {
+            method: 'PUT',
+            body: file,
+            headers: { 'Content-Type': file.type },
+        });
+
+        if (uploadResponse.ok) {
+            document.getElementById('profilePicPath').value = url.split('?')[0]; // Store file URL in input field
+            alert('Profile picture uploaded!');
+        } else {
+            alert('Upload failed!');
+        }
+    });
+
+    document.getElementById('uploadQualifications').addEventListener('click', async () => {
+        const fileInput = document.getElementById('vQualification');
+        if (fileInput.files.length === 0) return alert('Select at least one file!');
+
+        let uploadedPaths = [];
+
+        for (const file of fileInput.files) {
+            const response = await fetch('/api/s3-presigned-url', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filename: file.name, filetype: file.type })
+            });
+
+            const { url } = await response.json();
+
+            const uploadResponse = await fetch(url, {
+                method: 'PUT',
+                body: file,
+                headers: { 'Content-Type': file.type },
+            });
+
+            if (uploadResponse.ok) {
+                uploadedPaths.push(url.split('?')[0]); // Store file URLs
+            }
+        }
+
+        document.getElementById('qualificationPaths').value = JSON.stringify(uploadedPaths);
+        alert('Qualifications uploaded!');
+    });
+</script>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
 </body>
