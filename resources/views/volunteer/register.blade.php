@@ -159,15 +159,18 @@
             <input
                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-gray-50 focus:outline-none"
                 id="vProfilepic" name="vProfilepic" type="file" accept="image/*">
+            <p class="mt-1 text-sm text-gray-500">Max file size: 10MB (JPEG, PNG, JPG, GIF).</p>
         </div>
 
         <!-- Qualification (Multiple Files) -->
         <div>
-            <label class="block text-sm font-medium text-gray-700" for="vQualification">Qualifications (Upload multiple files)</label>
+            <label class="block text-sm font-medium text-gray-700" for="vQualification">Qualifications</label>
             <input
                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-gray-50 focus:outline-none"
                 id="vQualification" name="vQualification[]" type="file" multiple>
+            <p class="mt-1 text-sm text-gray-500">Max file size per file: 10MB (PDF, DOC, DOCX, ZIP, JPEG, PNG, JPG, GIF).</p>
         </div>
+
 
         <!-- Submit Button -->
         <div class="flex justify-between pt-4">

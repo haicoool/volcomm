@@ -42,8 +42,8 @@ class VolunteerController extends Controller
                 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:\'"\\|,.<>\/?]).+$/',
             ],
             'vSkill' => 'nullable|string',
-            'vProfilepic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'vQualification.*' => 'nullable|file|mimes:pdf,doc,docx,zip,jpeg,png,jpg,gif|max:5000',
+            'vProfilepic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'vQualification.*' => 'nullable|file|mimes:pdf,doc,docx,zip,jpeg,png,jpg,gif|max:10240',
         ]);
 
         // Handle profile picture upload to S3
