@@ -31,6 +31,7 @@ class VolunteerController extends Controller
 
     public function register(Request $request)
     {
+        // Validate the request data
         $request->validate([
             'vName' => 'required|string|max:255',
             'vEmail' => 'required|email|unique:volunteers',
@@ -41,24 +42,42 @@ class VolunteerController extends Controller
                 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:\'"\\|,.<>\/?]).+$/',
             ],
             'vSkill' => 'nullable|string',
-            'vProfilepic' => 'nullable|url',
-            'vQualification' => 'nullable|string',
+            'vProfilepic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'vQualification.*' => 'nullable|file|mimes:pdf,doc,docx,zip,jpeg,png,jpg,gif|max:10240',
         ]);
 
+        // Handle profile picture upload to S3
+        $profilePicPath = null;
+        if ($request->hasFile('vProfilepic')) {
+            $file = $request->file('vProfilepic');
+            $profilePicPath = $file->store('volunteer/profilepics', 's3');
+        }
+
+        // Handle qualifications upload to S3
+        $qualificationPaths = [];
+        if ($request->hasFile('vQualification')) {
+            foreach ($request->file('vQualification') as $file) {
+                $path = $file->store('volunteer/qualifications', 's3');
+                $qualificationPaths[] = basename($path);
+            }
+        }
+
+        // Create new volunteer
         $volunteer = new Volunteer();
         $volunteer->vName = $request->vName;
         $volunteer->vEmail = $request->vEmail;
         $volunteer->vPass = Hash::make($request->vPass);
         $volunteer->vSkill = $request->vSkill;
-        $volunteer->vProfilepic = $request->vProfilepic;
-        $volunteer->vQualification = $request->vQualification;
+        $volunteer->vProfilepic = $profilePicPath;
+        $volunteer->vQualification = json_encode($qualificationPaths);
         $volunteer->save();
 
+        // Log in the volunteer
         Auth::login($volunteer);
 
+        // Redirect to interest selection page
         return redirect()->route('volunteer.interest');
     }
-
 
     public function showInterestForm()
     {

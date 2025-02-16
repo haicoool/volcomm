@@ -7,7 +7,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OpportunityController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CertificateController;
-use App\Http\Controllers\S3UploadController;
 
 // Home Route
 Route::get('/', function () {
@@ -199,5 +198,3 @@ Route::post('/admin/organizations/accept/{id}', [AdminController::class, 'accept
 Route::post('/admin/organizations/reject/{id}', [AdminController::class, 'rejectOrganization'])->name('admin.organizations.reject');
 
 Route::get('/admin/manage', [AdminController::class, 'manageAdmins'])->name('admin.manage');
-
-Route::post('/s3-presigned-url', [S3UploadController::class, 'getPresignedUrl']);
