@@ -219,7 +219,7 @@
                     <div class="flex items-center justify-between mb-2">
                         <!-- Construct the full S3 path and generate a public URL -->
                         @php
-                            $s3Path = 'volunteer/qualifications/' . $qualification; // Construct the full S3 path
+                            $s3Path = $qualification; // Construct the full S3 path
                             $fileUrl = Storage::disk('s3')->url($s3Path); // Generate the public URL
                         @endphp
 
