@@ -65,6 +65,8 @@ Route::post('/volunteer/update-interests', [VolunteerController::class, 'updateI
 
 Route::get('/certificate/download/{registrationId}', [VolunteerController::class, 'downloadCertificate'])->name('downloadCertificate');
 
+Route::post('/volunteer/change-password', [VolunteerController::class, 'changePassword'])->name('volunteer.change-password');
+
 
 
 // Organization Routes

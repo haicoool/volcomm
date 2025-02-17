@@ -455,5 +455,26 @@ class VolunteerController extends Controller
         return redirect()->route('volunteer.login')->with('status', 'Your password has been reset!');
     }
 
+    public function changePassword(Request $request)
+    {
+        $volunteer = Auth::user(); // Get the authenticated volunteer
+
+        // Validate the request
+        $request->validate([
+            'currentPassword' => 'required|current_password',
+            'newPassword' => 'required|min:6|confirmed',
+        ]);
+
+        // Update password
+        $volunteer->vPass = Hash::make($request->newPassword);
+        $volunteer->save();
+
+        // Stay on the same page, highlight the password section
+        return view('volunteer.editProfile', [
+            'volunteer' => $volunteer,
+            'activeSection' => 'password', // Indicate that the password section was updated
+            'success' => 'Password changed successfully!',
+        ]);
+    }
 
 }

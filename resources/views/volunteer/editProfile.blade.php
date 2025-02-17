@@ -180,6 +180,20 @@
                 <input type="file" name="vProfilepic" id="vProfilepic" class="mt-1 block w-full">
             </div>
 
+            <!-- Submit Button -->
+            <div class="flex justify-center">
+                <button type="submit" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all">
+                    Update Profile
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Change Password Section -->
+    <div id="changePassword" class="bg-white p-6 rounded-lg shadow hidden-section">
+        <h3 class="text-2xl font-semibold mb-6 text-gray-800">Change Password</h3>
+        <form method="POST" action="{{ route('volunteer.change-password') }}" onsubmit="handleUpdate(event)">
+            @csrf
             <!-- Current Password -->
             <div class="mb-4">
                 <label for="currentPassword" class="block text-sm font-medium text-gray-700">Current Password</label>
@@ -189,19 +203,19 @@
             <!-- New Password -->
             <div class="mb-4">
                 <label for="newPassword" class="block text-sm font-medium text-gray-700">New Password</label>
-                <input type="password" name="newPassword" id="newPassword" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                <input type="password" name="newPassword" id="newPassword" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
             </div>
 
             <!-- Confirm New Password -->
             <div class="mb-4">
                 <label for="newPasswordConfirmation" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
-                <input type="password" name="newPassword_confirmation" id="newPasswordConfirmation" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                <input type="password" name="newPassword_confirmation" id="newPasswordConfirmation" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
             </div>
 
             <!-- Submit Button -->
             <div class="flex justify-center">
                 <button type="submit" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all">
-                    Update Profile
+                    Change Password
                 </button>
             </div>
         </form>
