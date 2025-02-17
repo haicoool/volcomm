@@ -49,9 +49,12 @@
         </div>
 
         <!-- Password Field -->
-        <div class="mb-6">
+        <div class="mb-6 relative">
             <label for="organizationPass" class="block text-sm font-medium text-gray-700">Password</label>
             <input type="password" name="organizationPass" id="organizationPass" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+            <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility()">
+                <i id="togglePasswordIcon" class="fas fa-eye text-gray-500"></i>
+            </span>
         </div>
 
         <!-- Submit Button -->
@@ -70,6 +73,22 @@
 
 <!-- Flowbite JS -->
 <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.js"></script>
+
+<script>
+function togglePasswordVisibility() {
+    const passwordField = document.getElementById('organizationPass');
+    const toggleIcon = document.getElementById('togglePasswordIcon');
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordField.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    }
+}
+</script>
 
 </body>
 </html>
