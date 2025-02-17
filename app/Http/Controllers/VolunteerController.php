@@ -257,9 +257,9 @@ class VolunteerController extends Controller
                 $originalFileName = $file->getClientOriginalName();
                 $newFileName = $randomNumber . '-' . $originalFileName;
 
-                // Store the file on S3 and get the path
+                // Store the file on S3 and get the relative path
                 $path = $file->storeAs('volunteer/qualifications', $newFileName, 's3');
-                $qualificationPaths[] = Storage::disk('s3')->url($path); // Get public URL
+                $qualificationPaths[] = $path; // Store the relative path, not the full URL
             }
 
             // Merge old qualifications with new ones
@@ -275,6 +275,7 @@ class VolunteerController extends Controller
             'success' => 'Qualifications added successfully!',
         ]);
     }
+
 
 
     // Remove Qualification
