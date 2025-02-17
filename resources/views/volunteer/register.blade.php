@@ -145,14 +145,9 @@
         <!-- Confirm Password -->
         <div>
             <label for="vPass_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-            <div class="relative">
-                <input type="password" name="vPass_confirmation" id="vPass_confirmation"
-                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm"
-                       required>
-                <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" id="toggleConfirmPassword">
-                    <i class="fas fa-eye"></i>
-                </span>
-            </div>
+            <input type="password" name="vPass_confirmation" id="vPass_confirmation"
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm"
+                   required>
             <div id="confirm-password-validation" class="validation-message"></div>
         </div>
 
@@ -265,14 +260,6 @@
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
         togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
-    });
-
-    // Password visibility toggle for confirm password
-    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-    toggleConfirmPassword.addEventListener('click', () => {
-        const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        confirmPasswordInput.setAttribute('type', type);
-        toggleConfirmPassword.querySelector('i').classList.toggle('fa-eye-slash');
     });
 </script>
 

@@ -49,12 +49,7 @@
         <!-- Password Input -->
         <div class="mb-6">
             <label for="vPass" class="block text-sm font-medium text-gray-700">Password</label>
-            <div class="relative">
-                <input type="password" name="vPass" id="vPass" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter your password" required>
-                <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility()">
-                    <i id="togglePasswordIcon" class="fas fa-eye text-gray-500"></i>
-                </span>
-            </div>
+            <input type="password" name="vPass" id="vPass" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter your password" required>
         </div>
 
         <!-- Submit Button -->
@@ -80,22 +75,6 @@
 
 <!-- Flowbite JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-
-<script>
-    function togglePasswordVisibility() {
-        const passwordInput = document.getElementById('vPass');
-        const toggleIcon = document.getElementById('togglePasswordIcon');
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            toggleIcon.classList.remove('fa-eye');
-            toggleIcon.classList.add('fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            toggleIcon.classList.remove('fa-eye-slash');
-            toggleIcon.classList.add('fa-eye');
-        }
-    }
-</script>
 
 </body>
 </html>
