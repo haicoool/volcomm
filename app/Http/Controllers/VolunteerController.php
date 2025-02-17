@@ -200,28 +200,20 @@ class VolunteerController extends Controller
         return view('volunteer.editProfile', compact('volunteer')); // Pass volunteer data to view
     }
 
-    // Update the profile
+    
     // Update Profile
     public function updateProfile(Request $request)
     {
         $volunteer = Auth::user(); // Get the authenticated volunteer
 
-        // Validation rules
-        $rules = [
+        $request->validate([
             'vName' => 'sometimes|required|string|max:255',
             'vEmail' => 'sometimes|required|email|unique:volunteers,vEmail,' . $volunteer->vId,
             'vSkill' => 'sometimes|required|string',
             'vProfilepic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ];
-
-        // Add password validation rules only if newPassword is present
-        if ($request->filled('newPassword')) {
-            $rules['currentPassword'] = 'required|current_password';
-            $rules['newPassword'] = 'required|min:6|confirmed';
-        }
-
-        // Validate the request
-        $request->validate($rules);
+            'currentPassword' => 'required_with:newPassword|current_password', // Validate current password
+            'newPassword' => 'nullable|min:6|confirmed', // Validate new password with confirmation
+        ]);
 
         // Update fields if changed
         if ($request->filled('vName')) $volunteer->vName = $request->vName;
@@ -453,28 +445,6 @@ class VolunteerController extends Controller
         $resetData->delete();
 
         return redirect()->route('volunteer.login')->with('status', 'Your password has been reset!');
-    }
-
-    public function changePassword(Request $request)
-    {
-        $volunteer = Auth::user(); // Get the authenticated volunteer
-
-        // Validate the request
-        $request->validate([
-            'currentPassword' => 'required|current_password',
-            'newPassword' => 'required|min:6|confirmed',
-        ]);
-
-        // Update password
-        $volunteer->vPass = Hash::make($request->newPassword);
-        $volunteer->save();
-
-        // Stay on the same page, highlight the password section
-        return view('volunteer.editProfile', [
-            'volunteer' => $volunteer,
-            'activeSection' => 'password', // Indicate that the password section was updated
-            'success' => 'Password changed successfully!',
-        ]);
     }
 
 }

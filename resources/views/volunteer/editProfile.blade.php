@@ -141,17 +141,14 @@
         <input type="radio" id="switchProfile" name="switchSection" value="Profile" checked="checked" onclick="showSection('editProfile')" />
         <input type="radio" id="switchQualifications" name="switchSection" value="Qualifications" onclick="showSection('manageQualifications')" />
         <input type="radio" id="switchInterests" name="switchSection" value="Interests" onclick="showSection('updateInterests')" />
-        <input type="radio" id="switchPassword" name="switchSection" value="Password" onclick="showSection('changePassword')" />
         <label for="switchProfile">Edit Profile</label>
         <label for="switchQualifications">Manage Qualifications</label>
         <label for="switchInterests">Update Interests</label>
-        <label for="switchPassword">Change Password</label>
         <div class="switch-wrapper">
             <div class="switch">
                 <div>Edit Profile</div>
                 <div>Manage Qualifications</div>
                 <div>Update Interests</div>
-                <div>Change Password</div>
             </div>
         </div>
     </div>
@@ -160,7 +157,7 @@
 
 <!-- Main content - Forms and Sections -->
 <div class="max-w-7xl mx-auto p-8 bg-white rounded-lg shadow-lg mt-8">
-    <!-- Combined Edit Profile and Change Password Section -->
+    <!-- Edit Profile Section -->
     <div id="editProfile" class="bg-white p-6 rounded-lg shadow visible-section">
         <h3 class="text-2xl font-semibold mb-6 text-gray-800">Edit Profile</h3>
         <form method="POST" action="{{ route('volunteer.update-profile') }}" enctype="multipart/form-data" onsubmit="handleUpdate(event)">
@@ -181,6 +178,24 @@
             <div class="mb-4">
                 <label for="vProfilepic" class="block text-sm font-medium text-gray-700">Profile Picture</label>
                 <input type="file" name="vProfilepic" id="vProfilepic" class="mt-1 block w-full">
+            </div>
+
+            <!-- Current Password -->
+            <div class="mb-4">
+                <label for="currentPassword" class="block text-sm font-medium text-gray-700">Current Password</label>
+                <input type="password" name="currentPassword" id="currentPassword" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+
+            <!-- New Password -->
+            <div class="mb-4">
+                <label for="newPassword" class="block text-sm font-medium text-gray-700">New Password</label>
+                <input type="password" name="newPassword" id="newPassword" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Confirm New Password -->
+            <div class="mb-4">
+                <label for="newPasswordConfirmation" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+                <input type="password" name="newPassword_confirmation" id="newPasswordConfirmation" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             <!-- Submit Button -->
@@ -204,11 +219,12 @@
                     <div class="flex items-center justify-between mb-2">
                         <!-- Construct the full S3 path and generate a public URL -->
                         @php
-                            $fileUrl = Storage::disk('s3')->url($qualification); // Generate the public URL using the relative path
+                            $s3Path = 'volunteer/qualifications/' . $qualification; // Construct the full S3 path
+                            $fileUrl = Storage::disk('s3')->url($s3Path); // Generate the public URL
                         @endphp
 
-                        <!-- Display file link -->
-                        <a href="{{ $fileUrl }}" target="_blank" class="text-blue-500 hover:underline">{{ basename($qualification) }}</a>
+                            <!-- Display file link -->
+                        <a href="{{ $fileUrl }}" target="_blank" class="text-blue-500 hover:underline">{{ $qualification }}</a>
 
                         <form action="{{ route('volunteer.remove-qualification') }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to remove this qualification?')">
                             @csrf
@@ -222,7 +238,6 @@
                 <p>No qualifications uploaded.</p>
             @endif
         </div>
-
 
         <!-- Upload New Qualifications -->
         <form action="{{ route('volunteer.add-qualification') }}" method="POST" enctype="multipart/form-data">
@@ -274,42 +289,13 @@
         </form>
     </div>
 
-    <!-- Change Password Section -->
-    <div id="changePassword" class="bg-white p-6 rounded-lg shadow hidden-section">
-        <h3 class="text-2xl font-semibold mb-6 text-gray-800">Change Password</h3>
-        <form method="POST" action="{{ route('volunteer.change-password') }}" onsubmit="handleUpdate(event)">
-            @csrf
-            <!-- Current Password -->
-            <div class="mb-4">
-                <label for="currentPassword" class="block text-sm font-medium text-gray-700">Current Password</label>
-                <input type="password" name="currentPassword" id="currentPassword" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
-            </div>
-            <!-- New Password -->
-            <div class="mb-4">
-                <label for="newPassword" class="block text-sm font-medium text-gray-700">New Password</label>
-                <input type="password" name="newPassword" id="newPassword" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
-            </div>
-            <!-- Confirm New Password -->
-            <div class="mb-4">
-                <label for="newPasswordConfirmation" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
-                <input type="password" name="newPassword_confirmation" id="newPasswordConfirmation" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
-            </div>
-            <!-- Submit Button -->
-            <div class="flex justify-center">
-                <button type="submit" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all">
-                    Change Password
-                </button>
-            </div>
-        </form>
-    </div>
-
 </div>
 
 
 <!-- JavaScript to toggle between sections and handle SweetAlert -->
 <script>
     function showSection(section) {
-        const sections = ['editProfile', 'manageQualifications', 'updateInterests', 'changePassword'];
+        const sections = ['editProfile', 'manageQualifications', 'updateInterests'];
         sections.forEach(s => {
             document.getElementById(s).classList.remove('visible-section');
             document.getElementById(s).classList.add('hidden-section');
