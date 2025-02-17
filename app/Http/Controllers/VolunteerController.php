@@ -211,7 +211,6 @@ class VolunteerController extends Controller
             'vEmail' => 'sometimes|required|email|unique:volunteers,vEmail,' . $volunteer->vId,
             'vSkill' => 'sometimes|required|string',
             'vProfilepic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'currentPassword' => 'required_with:newPassword|current_password', // Validate current password
             'newPassword' => 'nullable|min:6|confirmed', // Validate new password with confirmation
         ]);
 
