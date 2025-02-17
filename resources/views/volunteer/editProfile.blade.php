@@ -157,9 +157,9 @@
 
 <!-- Main content - Forms and Sections -->
 <div class="max-w-7xl mx-auto p-8 bg-white rounded-lg shadow-lg mt-8">
-    <!-- Edit Profile Section -->
+    <!-- Combined Edit Profile and Change Password Section -->
     <div id="editProfile" class="bg-white p-6 rounded-lg shadow visible-section">
-        <h3 class="text-2xl font-semibold mb-6 text-gray-800">Edit Profile</h3>
+        <h3 class="text-2xl font-semibold mb-6 text-gray-800">Edit Profile & Change Password</h3>
         <form method="POST" action="{{ route('volunteer.update-profile') }}" enctype="multipart/form-data" onsubmit="handleUpdate(event)">
             @csrf
             <!-- Name -->
@@ -180,20 +180,6 @@
                 <input type="file" name="vProfilepic" id="vProfilepic" class="mt-1 block w-full">
             </div>
 
-            <!-- Submit Button -->
-            <div class="flex justify-center">
-                <button type="submit" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all">
-                    Update Profile
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <!-- Change Password Section -->
-    <div id="changePassword" class="bg-white p-6 rounded-lg shadow hidden-section">
-        <h3 class="text-2xl font-semibold mb-6 text-gray-800">Change Password</h3>
-        <form method="POST" action="{{ route('volunteer.change-password') }}" onsubmit="handleUpdate(event)">
-            @csrf
             <!-- Current Password -->
             <div class="mb-4">
                 <label for="currentPassword" class="block text-sm font-medium text-gray-700">Current Password</label>
@@ -215,7 +201,7 @@
             <!-- Submit Button -->
             <div class="flex justify-center">
                 <button type="submit" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all">
-                    Change Password
+                    Update Profile & Change Password
                 </button>
             </div>
         </form>
