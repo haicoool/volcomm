@@ -219,12 +219,11 @@
                     <div class="flex items-center justify-between mb-2">
                         <!-- Construct the full S3 path and generate a public URL -->
                         @php
-                            $s3Path = 'volunteer/qualifications/' . $qualification; // Construct the full S3 path
-                            $fileUrl = Storage::disk('s3')->url($s3Path); // Generate the public URL
+                            $fileUrl = Storage::disk('s3')->url($qualification); // Generate the public URL using the relative path
                         @endphp
 
-                            <!-- Display file link -->
-                        <a href="{{ $fileUrl }}" target="_blank" class="text-blue-500 hover:underline">{{ $qualification }}</a>
+                        <!-- Display file link -->
+                        <a href="{{ $fileUrl }}" target="_blank" class="text-blue-500 hover:underline">{{ basename($qualification) }}</a>
 
                         <form action="{{ route('volunteer.remove-qualification') }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to remove this qualification?')">
                             @csrf
@@ -238,6 +237,7 @@
                 <p>No qualifications uploaded.</p>
             @endif
         </div>
+
 
         <!-- Upload New Qualifications -->
         <form action="{{ route('volunteer.add-qualification') }}" method="POST" enctype="multipart/form-data">

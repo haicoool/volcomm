@@ -200,7 +200,7 @@ class VolunteerController extends Controller
         return view('volunteer.editProfile', compact('volunteer')); // Pass volunteer data to view
     }
 
-    
+    // Update the profile
     // Update Profile
     public function updateProfile(Request $request)
     {
@@ -446,5 +446,6 @@ class VolunteerController extends Controller
 
         return redirect()->route('volunteer.login')->with('status', 'Your password has been reset!');
     }
+
 
 }
