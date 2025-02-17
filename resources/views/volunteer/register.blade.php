@@ -117,9 +117,14 @@
         <!-- Password -->
         <div>
             <label for="vPass" class="block text-sm font-medium text-gray-700">Password</label>
-            <input type="password" name="vPass" id="vPass"
-                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm"
-                   required>
+            <div class="relative">
+                <input type="password" name="vPass" id="vPass"
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm"
+                       required>
+                <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" id="togglePassword">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
             <!-- Password Requirements -->
             <div id="password-requirements" class="mt-2 text-sm text-gray-600 space-y-1">
                 <div class="flex items-center" id="uppercase-requirement">
@@ -247,6 +252,14 @@
             confirmPasswordValidation.textContent = '';
             confirmPasswordValidation.classList.remove('valid', 'invalid');
         }
+    });
+
+    // Password visibility toggle
+    const togglePassword = document.getElementById('togglePassword');
+    togglePassword.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
     });
 </script>
 
