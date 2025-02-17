@@ -206,13 +206,22 @@ class VolunteerController extends Controller
     {
         $volunteer = Auth::user(); // Get the authenticated volunteer
 
-        $request->validate([
+        // Validation rules
+        $rules = [
             'vName' => 'sometimes|required|string|max:255',
             'vEmail' => 'sometimes|required|email|unique:volunteers,vEmail,' . $volunteer->vId,
             'vSkill' => 'sometimes|required|string',
             'vProfilepic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'newPassword' => 'nullable|min:6|confirmed', // Validate new password with confirmation
-        ]);
+        ];
+
+        // Add password validation rules only if newPassword is present
+        if ($request->filled('newPassword')) {
+            $rules['currentPassword'] = 'required|current_password';
+            $rules['newPassword'] = 'required|min:6|confirmed';
+        }
+
+        // Validate the request
+        $request->validate($rules);
 
         // Update fields if changed
         if ($request->filled('vName')) $volunteer->vName = $request->vName;
